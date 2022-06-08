@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
+/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 19:09:22 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/08 19:35:26 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/08 22:14:10 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+#include <sys/types.h>
 
 char *copy_up_to_NULL(char * ptr)
 {
@@ -71,6 +72,21 @@ char *get_next_line(int fd)
 		return (NULL);
 
 
+
+
+	val = read(fd, ptr, BUFFER_SIZE);
+	
+	// printf("strlen: %zu\n", ft_strlen(temp));
+	// if(val < 0)
+	// 	return(NULL);
+	if (val == 0 && ft_strlen(temp) != 0)
+		return (temp);
+	else if (val <= 0)
+		return (NULL);
+
+
+
+
 	// if we are in the second round calling the function, we need
 	// extra memory from the previouse calling
 	if(ft_strlen(temp) != 0)
@@ -81,16 +97,13 @@ char *get_next_line(int fd)
 	
 	//printf("BUFFer: %d\n", BUFFER_SIZE);
 	
-	val = read(fd, ptr, BUFFER_SIZE);
-	
-	
-	if(val < 0)
-		return(NULL);
-	//printf("fail\n");
-	if (val == 0)
-		printf("end of file\n");
-		
 
+
+	// //printf("fail\n");
+	// if (val == 0)
+	
+		
+	
 	// while '\n' not found in ptr
 	while (ft_strchr(ptr, '\n') == 0)
 	{
@@ -141,11 +154,11 @@ char *get_next_line(int fd)
 
 	temp_temp = ft_strjoin(temp, copy_up_to_NULL(ptr));
 
-
+	//printf("temp_before: %s\n", temp);
 	// +1 cause the first character would be '\n' and we dont want that lol
-	temp = strdup(temp_ptr+1);
-
-	//printf("TEMP: %s\n", temp);
+	temp = ft_strdup(temp_ptr+1);
+	// printf("temp_after: %s\n", temp);
+	// printf("TEMP: %s\n", temp);
 	//temp = ft_strchr(temp_ptr);
 	// printf("ptr_after: %s\n", ptr);
 	// printf("!!temp: %s\n", temp);
@@ -155,39 +168,37 @@ char *get_next_line(int fd)
 	return (temp_temp);
 }
 
-
-
-// int main()
-// {
+int main()
+{
 	 
-// 	int fd = open("test.txt", O_RDONLY, 0);
-// 	//int fd = open("test.txt", O_RDONLY, 0);
-// 	printf("fd: %d\n", fd);
+	int fd = open("test.txt", O_RDONLY, 0);
+	//int fd = open("test.txt", O_RDONLY, 0);
+	printf("fd: %d\n", fd);
 	
-// 	char *prr = get_next_line(fd);
-// 	printf("main: %s\n", prr);
+	char *prr = get_next_line(fd);
+	printf("main: %s\n", prr);
 	
-// 	prr = get_next_line(fd);
-// 	//prr = get_next_line(fd);
-// 	printf("second: %s\n", prr);
+	prr = get_next_line(fd);
+	//prr = get_next_line(fd);
+	printf("second: %s\n", prr);
 	
-// 	prr = get_next_line(fd);
-// 	printf("third: %s\n", prr);
+	prr = get_next_line(fd);
+	printf("third: %s\n", prr);
 	
-// 	prr = get_next_line(fd);
-// 	printf("four: %s\n", prr);
+	prr = get_next_line(fd);
+	printf("four: %s\n", prr);
 	
-// 	// prr = get_next_line(fd);
-// 	// printf("last: %s\n", prr);
+	// prr = get_next_line(fd);
+	// printf("last: %s\n", prr);
 
-// 	// prr = get_next_line(fd);
-// 	// printf("second main: %s\n\n", prr);
+	// prr = get_next_line(fd);
+	// printf("second main: %s\n\n", prr);
 
-// 	//close(fd1);
-// 	//int fd2 = open("test2.txt", O_RDONLY, 0);
-// 	//printf("open()-fd = %d\n", fd); 
+	//close(fd1);
+	//int fd2 = open("test2.txt", O_RDONLY, 0);
+	//printf("open()-fd = %d\n", fd); 
 	
-// 	//printf("fd = %d\n", fd2); 
-// 	//int fd = 3;
-//     return 0; 
-// }
+	//printf("fd = %d\n", fd2); 
+	//int fd = 3;
+    return 0; 
+}
