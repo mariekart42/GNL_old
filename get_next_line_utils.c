@@ -1,0 +1,141 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 16:25:34 by mmensing          #+#    #+#             */
+/*   Updated: 2022/06/08 16:47:48 by mmensing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line.h"
+
+/**
+ * @brief   function searches for the FIRST occurrence in str for character c
+            if str doesnt end with NUL program might crash 
+ * @param str string where c should get found
+ * @param c the character we are searching for 
+ * @return char*    returns pointer to string at the position where 'c' was found
+                    returns NULL if not found
+ */
+char	*ft_strchr(const char *str, int c)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] == (char) c)
+		return ((char *) str);
+	while (str[i] != '\0')
+	{
+		if ((c == '\0') && (str[i + 1] == '\0'))
+			return ((char *) str + i + 1);
+		if (str[i] == (char)c)
+		{
+			return ((char *) str + i);
+		}
+		i++;
+	}
+	return ((char *) '\0');
+}
+
+/**
+ * @brief function connects to given strings and allocates
+ * memory for them with malloc
+ * 
+ * @param s1 fist string
+ * @param s2 second string
+ * @return char pointer to allocated memory space
+ */
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*ptr;
+	int		i;
+	int		k;
+
+	if (!s1 || !s2)
+		return (NULL);
+	ptr = (char *) malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1);
+	if (!ptr)
+		return (NULL);
+	k = 0;
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		ptr[i] = s1[i];
+		i++;
+	}
+	while (s2[k] != '\0')
+	{
+		ptr[i] = s2[k];
+		i++;
+		k++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
+}
+
+/**
+ * @brief returns lengh of str
+ * 
+ * @param str 
+ * @return size_t lengh of str
+ */
+size_t	ft_strlen(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
+/**
+ * @brief   function copies str2(str2) into dest(str1) array
+            does not check the validity of the destination buffer
+            copies the data first to an intermediate buffer, then from the 
+            buffer to destination
+            -> similar to memcpy but better
+			one of dst or src can be NULL but not both!
+ * @param str1 destination string
+ * @param str2 str2 string
+ * @param n up to how many characters get copied 
+ * @return void* 
+ */
+
+void	rev_func(size_t i, size_t n, char *st1, char *st2)
+{
+	while (i < n)
+	{
+		st1[i] = st2[i];
+		i++;
+	}
+}
+
+void	*ft_memmove(void *str1, const void *str2, size_t n)
+{
+	size_t	i;
+	int		rev_i;
+	char	*st1;
+	char	*st2;
+
+	if (!str1 && !str2)
+		return (NULL);
+	i = 0;
+	rev_i = n - 1;
+	st1 = (char *)str1;
+	st2 = (char *)str2;
+	if (str1 < str2)
+	{
+		rev_func(i, n, st1, st2);
+		return (str1);
+	}
+	while (i++ < n)
+	{
+		st1[rev_i] = st2[rev_i];
+		rev_i--;
+	}
+	return (str1);
+}
