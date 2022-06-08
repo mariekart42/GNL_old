@@ -3,42 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 16:25:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/08 16:47:48 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/08 18:15:06 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/**
- * @brief   function searches for the FIRST occurrence in str for character c
-            if str doesnt end with NUL program might crash 
- * @param str string where c should get found
- * @param c the character we are searching for 
- * @return char*    returns pointer to string at the position where 'c' was found
-                    returns NULL if not found
- */
-char	*ft_strchr(const char *str, int c)
-{
-	int	i;
 
-	i = 0;
-	if (str[0] == (char) c)
-		return ((char *) str);
-	while (str[i] != '\0')
-	{
-		if ((c == '\0') && (str[i + 1] == '\0'))
-			return ((char *) str + i + 1);
-		if (str[i] == (char)c)
-		{
-			return ((char *) str + i);
-		}
-		i++;
-	}
-	return ((char *) '\0');
-}
 
 /**
  * @brief function connects to given strings and allocates
@@ -138,4 +112,86 @@ void	*ft_memmove(void *str1, const void *str2, size_t n)
 		rev_i--;
 	}
 	return (str1);
+}
+
+/**
+ * @brief	function searches for the first occurrence of the character 
+			c in the first n bytes in str
+ * @param str string i that c gets searched
+ * @param c the character that should get found
+ * @param n up to how many characters we are searching
+ * @return void* 
+ */
+void	*ft_memchr(const void *str, int c, size_t n)
+{
+	unsigned char	*ptr;
+	size_t			i;
+
+	ptr = (unsigned char *) str;
+	i = 0;
+	while (i < n)
+	{
+		if (ptr[i] == (unsigned char) c)
+		{
+			return ((void *) ptr + i);
+		}
+		i++;
+	}
+	return ((void *) '\0');
+}
+
+
+/**
+ * @brief   function searches for the FIRST occurrence in str for character c
+            if str doesnt end with NUL program might crash 
+ * @param str string where c should get found
+ * @param c the character we are searching for 
+ * @return char*    returns pointer to string at the position where 'c' was found
+                    returns NULL if not found
+ */
+char	*ft_strchr(const char *str, int c)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] == (char) c)
+		return ((char *) str);
+	while (str[i] != '\0')
+	{
+		if ((c == '\0') && (str[i + 1] == '\0'))
+			return ((char *) str + i + 1);
+		if (str[i] == (char)c)
+		{
+			return ((char *) str + i);
+		}
+		i++;
+	}
+	return ((char *) '\0');
+}
+
+
+/**
+ * @brief function duplicates a string and return a pointer pointing to the 
+ * first byte of copied string 
+ * memory reserved with malloc
+ * 
+ * @param src pointer to string that gets copied
+ * @return char* 
+ */
+char	*ft_strdup(char *src)
+{
+	int		size;
+	char	*ptr;
+	int		i;
+
+	i = 0;
+	size = ft_strlen(src) + 1;
+	ptr = (char *) malloc(size * sizeof(char));
+	while (src[i] != '\0')
+	{
+		ptr[i] = src[i];
+		i++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
 }

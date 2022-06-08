@@ -2,7 +2,7 @@ NAME = get_next_line.a
 CC	= gcc
 RM = rm -rf
 HEAD = get_next_line.h
-FLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 
 MAN_FILES = get_next_line.c get_next_line_utils.c
 
