@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 19:09:22 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/09 20:28:14 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/09 22:35:10 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,48 @@
 // 	return ((char *) '\0');
 // }
 
+/**
+ * @brief	function that searches for first '\n' cuts after it and cut again
+ *			at next occurence of '\n' or if end of string is reached
+ *			Bsp.:  before: halt'\n'deine fresse'\n'danke
+ *					after:         deine fresse
+ * @param temp_ptr 
+ * @return char* 	returns string without any '\n'
+ */
+char *ultimate_NULL_cutter(char *temp_ptr)
+{
+	char *new_ptr;
+	int i = 0;
+	//int len = ft_strlen(temp_ptr);
+	//int malloc_size;
+	int k = 0;
+	//malloc_size = 0;
+
+	// if there is no '\n' at all in string
+	if(ft_strchr(temp_ptr, '\n') == NULL)
+	{
+		return (temp_ptr);
+	}
+	while (temp_ptr[i] != '\n')
+		i++;
+	i++;
+	while (temp_ptr[i] != '\n' && i < ft_strlen(temp_ptr))	// < or <= ?
+	{
+		new_ptr[k] = temp_ptr[i];
+		i++;
+		k++;
+		//malloc_size++;
+	}
+	free(temp_ptr);
+	new_ptr = (char *) malloc(k+1);
+	if(!new_ptr)
+	{
+		return(NULL);
+	}
+	//new_ptr[i] = '\n';
+	//printf("i: %d\n", i);
+	return (new_ptr);
+}
 
 
 char *copy_up_to_NULL(char * ptr)
@@ -184,7 +226,7 @@ char *get_next_line(int fd)
 	// temp_temp: in the end joins whole temp with the beginning of
 	// ptr including '\n'
 	char *temp_temp;
-	temp_temp = (char *) malloc (BUFFER_SIZE);
+	temp_temp = (char *) malloc (BUFFER_SIZE + 1);
 	if(!temp_temp)
 	{
 		free(temp_temp);
@@ -202,14 +244,14 @@ char *get_next_line(int fd)
 	// 	return (NULL);
 	
 	char *ptr;
-	ptr = (char *) malloc(BUFFER_SIZE);
+	ptr = (char *) malloc(BUFFER_SIZE + 1);
 	if(!ptr)
 	{
 		free(ptr);
 		return (NULL);
 	}
-
-	//printf("1. strlen: %zu\n", ft_strlen(temp+1));
+	printf("after ptr alloc\n");
+	// printf("1. strlen: %zu\n", ft_strlen(temp+1));
 	char *temp;
 	//temp = (char *) malloc(BUFFER_SIZE * sizeof(char));
 	// if (!temp)
@@ -219,32 +261,32 @@ char *get_next_line(int fd)
 
 
 	static char *temp_ptr;
-	printf("--temp_ptr: %s\n", temp_ptr);
+	//printf("--temp_ptr: %s\n", temp_ptr);
 	//temp_ptr = "hdhdhd";
 	if (temp_ptr == 0)
 	{
-		temp_ptr = (char *) malloc(BUFFER_SIZE);
+		temp_ptr = (char *) malloc(BUFFER_SIZE + 1);
 		if(!temp_ptr)
 		{
 			printf("no\n");
 			free(temp_ptr);
 			return(NULL);
 		}
-		printf("here\n");
+		//printf("here\n");
 	}
-
+	printf("after temp_ptr alloc\n");
 	temp = (char *) malloc (BUFFER_SIZE + ft_strlen(temp_ptr));
 	if(!temp)
 	{
 		free(temp);
 		return (NULL);
 	}
-	printf("AAAtemp_ptr: %s\n", temp_ptr);
+	//printf("AAAtemp_ptr: %s\n", temp_ptr);
 	temp = ft_memmove(temp, temp_ptr, BUFFER_SIZE+ft_strlen(temp_ptr));
-	printf("BBBtemp_ptr: %s\n", temp_ptr);
+	//printf("BBBtemp_ptr: %s\n", temp_ptr);
 	//free(temp_ptr);
 	
-	//printf("IMPORTANT temp: %s\n\n", temp);
+	printf("IMPORTANT temp: %s\n\n", temp);
 
 
 	val = read(fd, ptr, BUFFER_SIZE);
@@ -267,7 +309,7 @@ char *get_next_line(int fd)
 		return (NULL);
 
 	}
-	//printf("2. strlen: %zu\n", ft_strlen(temp));
+	printf("2. strlen: %zu\n", ft_strlen(temp));
 
 
 	// if we are in the second round calling the function, we need
@@ -278,7 +320,6 @@ char *get_next_line(int fd)
 	// }
 
 	
-	//printf("BUFFer: %d\n", BUFFER_SIZE);
 	
 
 
@@ -302,7 +343,7 @@ char *get_next_line(int fd)
 		}
 	}
 		
-	
+
 
 
 
@@ -350,15 +391,32 @@ char *get_next_line(int fd)
 
 	//printf("00 before ptr: %s\n\n", ptr);
 
-
 	// temp_ptr: is the end cut of ptr without the beginning '\n'(temp_ptr++ is doing that)   
 	// -> is WORKING!
 	temp_ptr = ft_strdup(ptr);
 	
-	//printf("->00 before temp_ptr: %s\n\n", temp_ptr);
-	temp_ptr = ft_strchr(temp_ptr, '\n');
-	temp_ptr++;
-	printf("temp_ptr: %s\n", temp_ptr);
+	// printf("->00 before temp_ptr: %s\n\n", temp_ptr);
+	
+	//printf("BUFFer: %d\n", BUFFER_SIZE);
+	
+	
+	
+	// printf("scurr\n");
+	//write(1, "fiude", 10);
+	
+	
+
+	//	function that searches for first '\n' cuts after it and cut again 
+	//	at next occurence of '\n' or if end of string is reached
+	temp_ptr = ultimate_NULL_cutter(temp_ptr);
+	if(!temp_ptr)
+	{
+		free(temp_ptr);
+		return(NULL);
+	}
+	// temp_ptr = ft_strchr(temp_ptr, '\n');
+	// temp_ptr++;
+	//printf("temp_ptr: %s\n", temp_ptr);
 	//printf("00 after temp_ptr: %s\n", temp_ptr);
 
 
@@ -389,14 +447,13 @@ char *get_next_line(int fd)
 
 	//free(temp_ptr);
 	free(ptr);
-	printf("temp_temp: %s\n", temp_temp);
+	//printf("temp_temp: %s\n", temp_temp);
 	//printf("temp_ptr: %s\n", temp_ptr);
 	return (temp_temp);
 }
 
 int main()
 {
-	 
 	int fd = open("test.txt", O_RDONLY, 0);
 	//int fd = open("test.txt", O_RDONLY, 0);
 	printf("fd: %d\n\n", fd);
