@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 16:25:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/08 18:15:06 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/09 15:27:05 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,8 @@ char	*ft_strdup(char *src)
 	i = 0;
 	size = ft_strlen(src) + 1;
 	ptr = (char *) malloc(size * sizeof(char));
+	if (!ptr)
+		return (NULL);
 	while (src[i] != '\0')
 	{
 		ptr[i] = src[i];
@@ -194,4 +196,49 @@ char	*ft_strdup(char *src)
 	}
 	ptr[i] = '\0';
 	return (ptr);
+}
+
+
+/**
+ * @brief	function allocates 'nitems' bytes of memory, each in size of 'size' 
+ 			(int, char etc)
+			different to malloc, sets all places to '\0'
+ * 
+ * @param count 
+ * @param size 
+ * @return void* returns pointer to allocated memory
+ */
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*output;
+
+	if (count >= 4294967295 || size >= 4294967295)
+		return (NULL);
+	output = malloc(count * size);
+	if (!output)
+		return (NULL);
+	ft_bzero(output, count * size);
+	return (output);
+}
+
+
+/**
+ * @brief	function erases the data in the n bytes of the memory
+       		starting at the location pointed to by s, by writing zeros 
+			(bytes containing '\0') to that area.
+ * @param str space in memory that gets sized to null
+ * @param n lengh we want to str gets nulled
+ */
+void	ft_bzero(void *str, size_t n)
+{
+	char	*ptr;
+	size_t	i;
+
+	ptr = (char *) str;
+	i = 0;
+	while (i < n)
+	{
+		ptr[i] = '\0';
+		i++;
+	}
 }
