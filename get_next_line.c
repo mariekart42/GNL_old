@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
+/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 19:09:22 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/09 18:40:23 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/09 20:28:14 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ char *realloc_and_join_temp(char *temp, int BUFF, char *ptr)
 char *get_next_line(int fd)
 {
 	static int delete_later = 1;
-	//printf("\n--------------- %d ---------------------\n\n", delete_later);
+	printf("\n--------------- %d ---------------------\n\n", delete_later);
 	delete_later++;
 
 	//int mem = 1;
@@ -186,7 +186,11 @@ char *get_next_line(int fd)
 	char *temp_temp;
 	temp_temp = (char *) malloc (BUFFER_SIZE);
 	if(!temp_temp)
+	{
+		free(temp_temp);
 		return (NULL);
+
+	}
 
 	// temp_ptr: saves in the very end the end of ptr without '\n' at the beginning
 	// calloc cause we will cut temp_ptr later and it will be not the full BUFFERSIZE
@@ -200,7 +204,10 @@ char *get_next_line(int fd)
 	char *ptr;
 	ptr = (char *) malloc(BUFFER_SIZE);
 	if(!ptr)
+	{
+		free(ptr);
 		return (NULL);
+	}
 
 	//printf("1. strlen: %zu\n", ft_strlen(temp+1));
 	char *temp;
@@ -212,19 +219,30 @@ char *get_next_line(int fd)
 
 
 	static char *temp_ptr;
+	printf("--temp_ptr: %s\n", temp_ptr);
 	//temp_ptr = "hdhdhd";
-	if(temp_ptr == 0)
+	if (temp_ptr == 0)
 	{
 		temp_ptr = (char *) malloc(BUFFER_SIZE);
 		if(!temp_ptr)
+		{
+			printf("no\n");
+			free(temp_ptr);
 			return(NULL);
+		}
+		printf("here\n");
 	}
 
 	temp = (char *) malloc (BUFFER_SIZE + ft_strlen(temp_ptr));
 	if(!temp)
+	{
+		free(temp);
 		return (NULL);
+	}
+	printf("AAAtemp_ptr: %s\n", temp_ptr);
 	temp = ft_memmove(temp, temp_ptr, BUFFER_SIZE+ft_strlen(temp_ptr));
-
+	printf("BBBtemp_ptr: %s\n", temp_ptr);
+	//free(temp_ptr);
 	
 	//printf("IMPORTANT temp: %s\n\n", temp);
 
@@ -237,10 +255,9 @@ char *get_next_line(int fd)
 	{
 		free(ptr);
 		free(temp_temp);
-		free(temp_ptr);
+		//free(temp_ptr);
 		return (temp);
 	}
-		
 	else if (val <= 0)
 	{
 		free(ptr);
@@ -278,6 +295,9 @@ char *get_next_line(int fd)
 		val = read(fd, ptr, BUFFER_SIZE);
 		if (val == 0)
 		{
+			free(ptr);
+			//free(temp_ptr);
+			free(temp_temp);
 			return(temp);
 		}
 	}
@@ -334,9 +354,11 @@ char *get_next_line(int fd)
 	// temp_ptr: is the end cut of ptr without the beginning '\n'(temp_ptr++ is doing that)   
 	// -> is WORKING!
 	temp_ptr = ft_strdup(ptr);
+	
 	//printf("->00 before temp_ptr: %s\n\n", temp_ptr);
 	temp_ptr = ft_strchr(temp_ptr, '\n');
 	temp_ptr++;
+	printf("temp_ptr: %s\n", temp_ptr);
 	//printf("00 after temp_ptr: %s\n", temp_ptr);
 
 
@@ -367,41 +389,42 @@ char *get_next_line(int fd)
 
 	//free(temp_ptr);
 	free(ptr);
-	
+	printf("temp_temp: %s\n", temp_temp);
+	//printf("temp_ptr: %s\n", temp_ptr);
 	return (temp_temp);
 }
 
-// int main()
-// {
+int main()
+{
 	 
-// 	int fd = open("test.txt", O_RDONLY, 0);
-// 	//int fd = open("test.txt", O_RDONLY, 0);
-// 	printf("fd: %d\n\n", fd);
+	int fd = open("test.txt", O_RDONLY, 0);
+	//int fd = open("test.txt", O_RDONLY, 0);
+	printf("fd: %d\n\n", fd);
 	
-// 	char *prr = get_next_line(fd);
-// 	printf("main: %s\n\n", prr);
+	char *prr = get_next_line(fd);
+	printf("main: %s\n\n", prr);
 	
-// 	prr = get_next_line(fd);
-// 	//prr = get_next_line(fd);
-// 	printf("second: %s\n\n", prr);
+	prr = get_next_line(fd);
+	//prr = get_next_line(fd);
+	printf("second: %s\n\n", prr);
 	
-// 	prr = get_next_line(fd);
-// 	printf("third: %s\n\n", prr);
+	prr = get_next_line(fd);
+	printf("third: %s\n\n", prr);
 	
-// 	prr = get_next_line(fd);
-// 	printf("four: %s\n\n", prr);
+	prr = get_next_line(fd);
+	printf("four: %s\n\n", prr);
 	
-// 	prr = get_next_line(fd);
-// 	printf("last: %s\n", prr);
+	prr = get_next_line(fd);
+	printf("last: %s\n", prr);
 
-// 	prr = get_next_line(fd);
-// 	printf("second main: %s\n\n", prr);
+	prr = get_next_line(fd);
+	printf("second main: %s\n\n", prr);
 
-// 	//close(fd1);
-// 	//int fd2 = open("test2.txt", O_RDONLY, 0);
-// 	//printf("open()-fd = %d\n", fd); 
+	//close(fd1);
+	//int fd2 = open("test2.txt", O_RDONLY, 0);
+	//printf("open()-fd = %d\n", fd); 
 	
-// 	//printf("fd = %d\n", fd2); 
-// 	//int fd = 3;
-//     return 0; 
-// }
+	//printf("fd = %d\n", fd2); 
+	//int fd = 3;
+    return 0; 
+}

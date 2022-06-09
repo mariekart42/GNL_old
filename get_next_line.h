@@ -4,7 +4,7 @@
 
 // defining BUFFERSITE, delete at the and (calling it in the command line)
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 4
 #endif
 
 
