@@ -4,3 +4,8 @@
 -    no submittig Makefile !! (i only use it cause i'm alpha chad)
 
 -    remove TESTER, .gitignore, this .txt file, .vscode and a.out files
+
+-     dont reallocate ptr on read
+
+-    do not initialize an empty string like thi   *ptr = "";  (undefined behaviour! + gets in the 'read-only' area)
+     -> do it like this   *ptr = '\0'

@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/11 22:43:36 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/11 23:38:16 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,10 @@ char *reallocate(char *string, int size, int copy_content)
 	int i = 0;
 	
 	new_ptr = (char *) malloc(ft_strlen(string) + size);
+	if(copy_content == 0)
+		printf("LEN_PTR: %zu\n\n", ft_strlen(string));
+	if(copy_content == 1)
+		printf("LEN_TEMP: %zu\n\n", ft_strlen(string));
 	if(!new_ptr || !string)
 	{
 		free(new_ptr);
@@ -291,17 +295,18 @@ char *get_next_line(int fd)
           }
           // CHANGED -> temp_ptr = "";      // so it can be used it join (see 'test_join.c') -> works!
      }
-     // dump shit i guess:
-     else      // if there was min 1 prev call -> BUFF size + len of temp_ptr PLUS reallocating
-     {
-          temp_ptr = realloc_temp_ptr(temp_ptr, BUFFER_SIZE);
-          if (!temp_ptr)
-          {
-               //free(temp_ptr); -> not free here! already freed in function
-               return(NULL);
-          }
-          //printf("len: %zu\n", ft_strlen(temp_ptr));
-     }
+	
+     // // dump shit i guess:
+     // else      // if there was min 1 prev call -> BUFF size + len of temp_ptr PLUS reallocating
+     // {
+     //      temp_ptr = realloc_temp_ptr(temp_ptr, BUFFER_SIZE);
+     //      if (!temp_ptr)
+     //      {
+     //           //free(temp_ptr); -> not free here! already freed in function
+     //           return(NULL);
+     //      }
+     //      
+     // }
 
 
      // ptr has content of .txt file in amount of BUFFERSIZE
@@ -313,7 +318,7 @@ char *get_next_line(int fd)
           return (NULL);
      }
 
-
+	
      // temp stores previouse content of ptr in loop -> temp_ptr
      char *temp;
      temp = (char *) malloc (BUFFER_SIZE);
@@ -323,28 +328,24 @@ char *get_next_line(int fd)
           free(temp);
           return (NULL);
      }
-	temp = "";
-     if (ft_strlen(temp_ptr) != 0) //there is something in temp_ptr
-          temp = reallocate(temp, BUFFER_SIZE, 1);
-
-
+	*temp = '\0';		// def do it like this!!
+	if(ft_strlen(temp_ptr) != 0)
+		temp = ft_strjoin(temp, temp_ptr);
      val = read(fd, ptr, BUFFER_SIZE);
 
-
+	printf("---------- in loop ----------------\n\n");
      while (val > 0 && ft_strchr(ptr, '\n') == NULL)
 	{
-		printf("1 RRRR: %s\n", temp);
-		temp = ft_strjoin(temp, ptr);		// gets null terminated ->-> problemo grande
-		printf("2 RRRR: %s\n", temp);
+		temp = ft_strjoin(temp, ptr);
 		temp = reallocate(temp, BUFFER_SIZE, 1);
 		if(!temp)
 		{
-			free(ptr);	//?
+			//free(ptr);	//?
 			return(NULL);
 		}
-		ptr = reallocate(ptr, 0, 0);
 		val = read(fd, ptr, BUFFER_SIZE);
 	}
+	printf("---------- out loop ----------------\n\n");
 	if (val == 0)
 	{
 		// return vals checke what if there is no '\n' at the end etc
@@ -377,29 +378,29 @@ char *get_next_line(int fd)
 int main()
 {
      int fd = open("test2.txt", O_RDONLY, 0);
-
+printf("-------- 1 -------------\n\n");
      char *ptr1;
      ptr1 = get_next_line(fd);
      printf("MAIN_1: %s\n", ptr1);
-
-     // char *ptr2;
-     // ptr2 = read(fd);
-     // printf("MAIN_2: %s\n", ptr2);
-
+printf("-------- 2 -------------\n\n");
+     char *ptr2;
+     ptr2 = get_next_line(fd);
+     printf("MAIN_2: %s\n", ptr2);
+printf("-------- 3 -------------\n\n");
      // char *ptr3;
-     // ptr3 = read(fd);
+     // ptr3 = get_next_linefd);
      // printf("MAIN_3: %s\n", ptr3);
-
+printf("-------- 4 -------------\n\n");
      // char *ptr4;
-     // ptr4 = read(fd);
+     // ptr4 = get_next_line(fd);
      // printf("MAIN_4: %s\n", ptr4);
-
+printf("-------- 5 -------------\n\n");
      // char *ptr5;
-     // ptr5 = read(fd);
+     // ptr5 = get_next_line(fd);
      // printf("MAIN_5: %s\n", ptr5);
-
+printf("-------- 6 -------------\n\n");
      // char *ptr6;
-     // ptr6 = read(fd);
+     // ptr6 = get_next_line(fd);
      // printf("MAIN_6: %s\n", ptr6);
 
 }
