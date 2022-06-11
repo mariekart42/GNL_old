@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/11 12:52:06 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/11 13:14:15 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@
  * @param BUFFER 
  * @return char* 
  */
-char *realloc_temp_outside_loop(char *temp, int BUFFER, char *temp_ptr, int mem)
+char *realloc_temp_outside_loop(char *temp, int BUFFER, char *temp_ptr)
 {
      char *new_ptr;
      int i = 0;
 
-     new_ptr = (char *) malloc ((BUFFER * mem) + ft_strlen(temp_ptr));
+     new_ptr = (char *) malloc (BUFFER + ft_strlen(temp_ptr));
      if(!temp || !new_ptr)
      {
           free(new_ptr);
           free(temp);
           return(NULL);
      }
-     while (i < ft_strlen(temp_ptr))//((BUFFER * mem) + ))
+     while (i < ft_strlen(temp_ptr))	//((BUFFER * mem) + ))
      {
           new_ptr[i] = temp_ptr[i];
           i++;
@@ -123,7 +123,7 @@ char *get_next_line(int fd)
                free(temp_ptr);
                return (NULL);
           }
-          temp_ptr = "";      // so it can be used it join (see 'test_join.c') -> works!
+          // CHANGED -> temp_ptr = "";      // so it can be used it join (see 'test_join.c') -> works!
      }
      else      // if there was min 1 prev call -> BUFF size + len of temp_ptr PLUS reallocating
      {
@@ -156,17 +156,46 @@ char *get_next_line(int fd)
           free(temp);
           return (NULL);
      }
+	temp = "";
      if (ft_strlen(temp_ptr) != 0) //there is something in temp_ptr
-          temp = realloc_temp_outside_loop(temp, BUFFER_SIZE, temp_ptr, mem);
+          temp = realloc_temp_outside_loop(temp, BUFFER_SIZE, temp_ptr);
 
 
      val = read(fd, ptr, BUFFER_SIZE);
 
 
-     while (val > 0)
+     while (val > 0 && ft_strchr(ptr, '\n') == NULL)
+	{
+
+		temp = ft_strjoin(temp, ptr);
+		temp = realloc_temp_inside_loop(temp, BUFFER_SIZE);
+		if(!temp)
+		{
+			free(ptr);	//?
+			return(NULL);
+		}
+		val = read(fd, ptr, BUFFER_SIZE);
+
+	}
+	if (val == 0)
+	{
+		// return vals checke what if there is no '\n' at the end etc
+	}
+     if (val < 0)   // in case of error in read
      {
-          
+          free(temp);
+          free(ptr);
+          return (NULL);
      }
+
+	printf("TEMP: %s\n", temp);
+	printf("PTR: %s\n", ptr);
+
+
+	// cut ptr in half and maybe at the and '\n'
+
+
+
 
      // while (val != 0)
      // {
@@ -210,12 +239,7 @@ char *get_next_line(int fd)
 
 
 
-     if (val < 0)   // in case of error in read
-     {
-          free(temp);
-          free(ptr);
-          return (NULL);
-     }
+
      return(temp);
 }
 
