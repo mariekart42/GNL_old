@@ -6,16 +6,104 @@
 /*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/11 13:14:15 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:26:15 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+
+
+char *try(char *temp, char *ptr)
+{
+     char *new_ptr;
+     char *new_temp;
+     char *test_new_ptr;
+     int i = 0;
+     
+     if (ptr[0] == '\n')
+     {
+          new_temp = (char *) malloc(1);
+          new_temp[0] = '\n'; // so while loop gets skipped
+     }
+     new_temp = (char *) malloc(ft_strlen(ptr) - ft_strlen(ft_strchr(ptr, '\n')) + 1);
+     if (!new_temp)
+          return(NULL);
+     while (ptr[i] != '\n')
+     {
+          new_temp[i] = ptr[i];
+          i++;
+     }
+     new_temp[i] = '\n';     
+     new_ptr = ft_strchr(ptr, '\n');
+     new_ptr+1;
+     new_new_ptr = ft_strchr(new_ptr, '\n');
+     if(test_new_ptr != NULL)
+     {
+          new_ptr[ft_strlen(ptr) - ft_strlen(test_new_ptr)] = '\0';    // right place?
+          new_ptr = ft_substr(new_ptr);
+     }
+     free(new_new_ptr);
+     if(p == 1)
+     {
+          free()
+          return(new_temp);
+
+     }
+     if(p == 2)
+     {
+
+          return(new_ptr);
+
+     }
+
+
+
+
+}
+
+
+
 /**
- * @brief      function reallocates mem for temp if including the     
- *             len of temp_ptr(static)
- *             puts content from temp_ptr to temp
+ * @brief function searches for first occurense of '\n' and returns a pointer
+ *        with all the previouse content before the '\n'
+ *        ends with '\n'
+ * 
+ * @param ptr 
+ * @return char* 
+ */
+char *new_line_cutter(char *ptr)
+{
+     char *new_ptr;
+     int i = 0;
+
+     if (ptr[0] == '\n')
+     {
+          new_ptr = (char *) malloc(1);
+          new_ptr[0] = '\n';
+          free(ptr);
+          return (new_ptr);
+     }
+     while (ptr[i] != '\n')
+     {
+          i++;
+     }
+     new_ptr = (char *) malloc(i+1);
+     i = 0;
+     while (ptr[i] != '\n')
+     {
+          new_ptr[i] = ptr[i];
+          i++;
+     }
+     new_ptr[i] = '\n';
+     free(ptr);
+     return(new_ptr);
+}
+
+/**
+ * @brief function reallocates mem for temp if including the     
+ *        len of temp_ptr(static)
+ *        puts content from temp_ptr to temp
  * @param temp 
  * @param BUFFER 
  * @return char* 
@@ -70,7 +158,7 @@ char *realloc_temp_inside_loop(char *temp, int BUFFER)
 }
 
 /**
- * @brief      function puts content in new allocated pointer with new size
+ * @brief function puts content in new allocated pointer with new size
  * 
  * @param temp_ptr 
  * @param BUFFER 
@@ -125,6 +213,7 @@ char *get_next_line(int fd)
           }
           // CHANGED -> temp_ptr = "";      // so it can be used it join (see 'test_join.c') -> works!
      }
+     // dump shit i guess:
      else      // if there was min 1 prev call -> BUFF size + len of temp_ptr PLUS reallocating
      {
           temp_ptr = realloc_temp_ptr(temp_ptr, BUFFER_SIZE);
@@ -192,52 +281,14 @@ char *get_next_line(int fd)
 	printf("PTR: %s\n", ptr);
 
 
+     temp = ft_strjoin(temp, new_line_cutter(ptr));
+
+     temp_ptr = ft_strchr(ptr, '\n');
+
+
+     printf("try: %s\n", try(temp, ptr));
+
 	// cut ptr in half and maybe at the and '\n'
-
-
-
-
-     // while (val != 0)
-     // {
-     //      if (val < 0)   // in case of error in read
-     //      {
-     //           free(temp);
-     //           free(ptr);
-     //           return (NULL);
-     //      }
-     //      if (ft_strlen(temp) == 0)
-     //      {
-     //           if (ft_strlen(temp_ptr) != 0)
-     //           {
-     //                temp = realloc_temp_lonely(temp, BUFFER_SIZE, temp_ptr); 
-     //                temp = ft_strjoin(temp_ptr, temp);
-     //                if(!temp)
-     //                {
-     //                     free(temp);
-     //                     return (NULL);
-     //                }
-     //           }
-     //           temp = ft_memmove(temp, ptr, BUFFER_SIZE);
-     //           temp = realloc_temp_lonely(temp, BUFFER_SIZE * 2, temp_ptr);
-     //           if(!temp)
-     //           {
-     //                free(temp);
-     //                return (NULL);
-     //           }
-     //           val = read(fd, ptr, BUFFER_SIZE);
-     //      }
-
-     //      else if (ft_strlen(temp_ptr) != 0)
-     //      {
-     //           printf("later alligator\n");
-     //           val = read (fd, ptr, BUFFER_SIZE);
-     //      }
-     //      mem++;
-     // }
-
-
-
-
 
 
      return(temp);
