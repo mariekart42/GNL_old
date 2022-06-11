@@ -4,8 +4,8 @@
 
 // defining BUFFERSITE, delete at the and (calling it in the command line)
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 4
-#endif
+#  define BUFFER_SIZE 4
+# endif
 
 
 # include <stddef.h>
@@ -16,8 +16,6 @@
 # include <string.h>
 # include <strings.h>
 
-#include <stddef.h>
-#include <string.h>
 
 char *get_next_line(int fd);
 
@@ -30,7 +28,8 @@ void	*ft_memset(void *s, int c, size_t len);
 char	*ft_strchr(const char *str, int c);
 void	*ft_memmove(void *str1, const void *str2, size_t n);
 char	*ft_strdup(char *src);
-// open 
+
+// open & close
 # include <fcntl.h> 
 # include <errno.h> 
 
@@ -38,8 +37,5 @@ char	*ft_strdup(char *src);
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <unistd.h>
-
-// close
-# include <fcntl.h>
 
 # endif
