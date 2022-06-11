@@ -2,3 +2,5 @@
      -> remove in the end from header
 
 -    no submittig Makefile !! (i only use it cause i'm alpha chad)
+
+-    remove TESTER, .gitignore, this .txt file, .vscode and a.out files

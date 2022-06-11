@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/10 16:18:58 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/11 12:52:06 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,58 @@
 /**
  * @brief      function reallocates mem for temp if including the     
  *             len of temp_ptr(static)
- * 
+ *             puts content from temp_ptr to temp
  * @param temp 
  * @param BUFFER 
  * @return char* 
  */
-char *realloc_temp_lonely(char *temp, int BUFFER, char *temp_ptr)
+char *realloc_temp_outside_loop(char *temp, int BUFFER, char *temp_ptr, int mem)
 {
      char *new_ptr;
      int i = 0;
 
-     new_ptr = (char *) malloc (BUFFER + ft_strlen(temp_ptr));
+     new_ptr = (char *) malloc ((BUFFER * mem) + ft_strlen(temp_ptr));
      if(!temp || !new_ptr)
      {
           free(new_ptr);
           free(temp);
           return(NULL);
      }
-     while (i < ((BUFFER * 2) + ft_strlen(temp_ptr)))
+     while (i < ft_strlen(temp_ptr))//((BUFFER * mem) + ))
      {
-          new_ptr[i] = temp[i];
+          new_ptr[i] = temp_ptr[i];
           i++;
      }
      free(temp);
      return (new_ptr);
+}
+
+/**
+ * @brief	funcion allocates mem based on strlen of temp + always one BUFFER
+ * 		purs old content in new allocated ptr 
+ * @param temp 
+ * @param BUFFER 
+ * @return char* 
+ */
+char *realloc_temp_inside_loop(char *temp, int BUFFER)
+{
+	char *new_ptr;
+	int i = 0;
+
+	new_ptr = (char *) malloc (ft_strlen(temp) + BUFFER);
+	if (!new_ptr)
+	{
+		free(new_ptr);
+		free(temp);
+		return (NULL);
+	}
+	while (i < ft_strlen(temp))
+	{
+		new_ptr[i] = temp[i];
+		i++;
+	}
+	free(temp);
+	return (new_ptr);
 }
 
 /**
@@ -55,7 +83,6 @@ char *realloc_temp_ptr(char *temp_ptr, int BUFFER)
 
      if(!temp_ptr)
      {
-
           free(temp_ptr);
           return(NULL);
      }
@@ -91,19 +118,18 @@ char *get_next_line(int fd)
      if (temp_ptr == 0)       // if its the first calling -> normal BUFF size
      {
           temp_ptr = (char *) malloc (BUFFER_SIZE);
-          if(! temp_ptr)
+          if (!temp_ptr)
           {
-
                free(temp_ptr);
                return (NULL);
           }
+          temp_ptr = "";      // so it can be used it join (see 'test_join.c') -> works!
      }
      else      // if there was min 1 prev call -> BUFF size + len of temp_ptr PLUS reallocating
      {
           temp_ptr = realloc_temp_ptr(temp_ptr, BUFFER_SIZE);
-          if (temp_ptr == NULL)
+          if (!temp_ptr)
           {
-
                //free(temp_ptr); -> not free here! already freed in function
                return(NULL);
           }
@@ -116,13 +142,12 @@ char *get_next_line(int fd)
      ptr = (char *) malloc(BUFFER_SIZE);
      if (!ptr)
      {
-
           free(ptr);
           return (NULL);
      }
 
 
-     // temp stores previouse content of ptr in loop
+     // temp stores previouse content of ptr in loop -> temp_ptr
      char *temp;
      temp = (char *) malloc (BUFFER_SIZE);
      if(!temp)
@@ -131,50 +156,65 @@ char *get_next_line(int fd)
           free(temp);
           return (NULL);
      }
-     if (ft_strlen(temp_ptr) == 0)
-          printf("YEEE\n");
+     if (ft_strlen(temp_ptr) != 0) //there is something in temp_ptr
+          temp = realloc_temp_outside_loop(temp, BUFFER_SIZE, temp_ptr, mem);
+
 
      val = read(fd, ptr, BUFFER_SIZE);
 
 
-     //join temp_ptr with temp somewhere
-
-     while (val != 0)
+     while (val > 0)
      {
-          if (val < 0)   // in case of error in read
-          {
-               free(temp);
-               free(ptr);
-               return (NULL);
-          }
-          if (ft_strlen(temp) == 0)
-          {
-               if (ft_strlen(temp_ptr) != 0)
-               {
-                    temp = realloc_temp_lonely(temp, BUFFER_SIZE, temp_ptr); 
-                    temp = ft_strjoin(temp_ptr, temp);
-                    if(!temp)
-                    {
-                         free(temp);
-                         return (NULL);
-                    }
-               }
-               temp = ft_memmove(temp, ptr, BUFFER_SIZE);
-               temp = realloc_temp_lonely(temp, BUFFER_SIZE * 2, temp_ptr);
-               if(!temp)
-               {
-                    free(temp);
-                    return (NULL);
-               }
-               val = read(fd, ptr, BUFFER_SIZE);
-          }
+          
+     }
 
-          else if (ft_strlen(temp_ptr) != 0)
-          {
-               printf("later alligator\n");
-               val = read (fd, ptr, BUFFER_SIZE);
-          }
-          mem++;
+     // while (val != 0)
+     // {
+     //      if (val < 0)   // in case of error in read
+     //      {
+     //           free(temp);
+     //           free(ptr);
+     //           return (NULL);
+     //      }
+     //      if (ft_strlen(temp) == 0)
+     //      {
+     //           if (ft_strlen(temp_ptr) != 0)
+     //           {
+     //                temp = realloc_temp_lonely(temp, BUFFER_SIZE, temp_ptr); 
+     //                temp = ft_strjoin(temp_ptr, temp);
+     //                if(!temp)
+     //                {
+     //                     free(temp);
+     //                     return (NULL);
+     //                }
+     //           }
+     //           temp = ft_memmove(temp, ptr, BUFFER_SIZE);
+     //           temp = realloc_temp_lonely(temp, BUFFER_SIZE * 2, temp_ptr);
+     //           if(!temp)
+     //           {
+     //                free(temp);
+     //                return (NULL);
+     //           }
+     //           val = read(fd, ptr, BUFFER_SIZE);
+     //      }
+
+     //      else if (ft_strlen(temp_ptr) != 0)
+     //      {
+     //           printf("later alligator\n");
+     //           val = read (fd, ptr, BUFFER_SIZE);
+     //      }
+     //      mem++;
+     // }
+
+
+
+
+
+     if (val < 0)   // in case of error in read
+     {
+          free(temp);
+          free(ptr);
+          return (NULL);
      }
      return(temp);
 }
