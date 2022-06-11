@@ -3,64 +3,102 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
+/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/11 16:26:15 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/11 22:43:36 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 
-
-char *try(char *temp, char *ptr)
+/**
+ * @brief function returns ptr content after first '\n' and before the next '\n'
+ * 
+ * @param ptr 
+ * @return char* 
+ */
+char *temp_ptr_content(char *ptr, char *temp_ptr)
 {
-     char *new_ptr;
-     char *new_temp;
-     char *test_new_ptr;
      int i = 0;
+	int k = 0;
+	int count = 0;
+	char *new_ptr;
      
-     if (ptr[0] == '\n')
-     {
-          new_temp = (char *) malloc(1);
-          new_temp[0] = '\n'; // so while loop gets skipped
-     }
-     new_temp = (char *) malloc(ft_strlen(ptr) - ft_strlen(ft_strchr(ptr, '\n')) + 1);
-     if (!new_temp)
-          return(NULL);
-     while (ptr[i] != '\n')
-     {
-          new_temp[i] = ptr[i];
+     while (ptr[i] != '\n')		// no leng check needed cause there has to be an '\n'
           i++;
-     }
-     new_temp[i] = '\n';     
-     new_ptr = ft_strchr(ptr, '\n');
-     new_ptr+1;
-     new_new_ptr = ft_strchr(new_ptr, '\n');
-     if(test_new_ptr != NULL)
-     {
-          new_ptr[ft_strlen(ptr) - ft_strlen(test_new_ptr)] = '\0';    // right place?
-          new_ptr = ft_substr(new_ptr);
-     }
-     free(new_new_ptr);
-     if(p == 1)
-     {
-          free()
-          return(new_temp);
+	i++;		// was '\n'
 
-     }
-     if(p == 2)
-     {
-
-          return(new_ptr);
-
-     }
-
-
-
-
+	k = i;
+	while (ptr[k] != '\n')
+	{
+		count++;
+		k++;
+	}
+	new_ptr = (char *) malloc(count);
+	if(!new_ptr)
+	{
+		free(new_ptr);
+		return(NULL);
+	}
+	k = 0;
+	while (ptr[i] != '\n')
+	{
+		new_ptr[k] = ptr[i];
+		k++;
+		i++;
+	}
+	free(ptr);
+	return (new_ptr);
 }
+
+
+
+
+
+// char *try(char *temp, char *ptr)
+// {
+//      char *new_ptr;
+//      char *new_temp;
+//      char *test_new_ptr;
+//      int i = 0;
+     
+//      if (ptr[0] == '\n')
+//      {
+//           new_temp = (char *) malloc(1);
+//           new_temp[0] = '\n'; // so while loop gets skipped
+//      }
+//      new_temp = (char *) malloc(ft_strlen(ptr) - ft_strlen(ft_strchr(ptr, '\n')) + 1);
+//      if (!new_temp)
+//           return(NULL);
+//      while (ptr[i] != '\n')
+//      {
+//           new_temp[i] = ptr[i];
+//           i++;
+//      }
+//      new_temp[i] = '\n';     
+//      new_ptr = ft_strchr(ptr, '\n');
+//      new_ptr += 1;
+//      new_new_ptr = ft_strchr(new_ptr, '\n');
+//      if(test_new_ptr != NULL)
+//      {
+//           new_ptr[ft_strlen(ptr) - ft_strlen(test_new_ptr)] = '\0';    // right place?
+//           new_ptr = ft_substr(new_ptr);
+//      }
+//      free(new_new_ptr);
+//      if(p == 1)
+//      {
+//           free()
+//           return(new_temp);
+
+//      }
+//      if(p == 2)
+//      {
+
+//           return(new_ptr);
+//      }
+// }
 
 
 
@@ -80,8 +118,12 @@ char *new_line_cutter(char *ptr)
      if (ptr[0] == '\n')
      {
           new_ptr = (char *) malloc(1);
+		if(!new_ptr)
+		{
+			free(new_ptr);
+			return(NULL);
+		}
           new_ptr[0] = '\n';
-          free(ptr);
           return (new_ptr);
      }
      while (ptr[i] != '\n')
@@ -96,66 +138,102 @@ char *new_line_cutter(char *ptr)
           i++;
      }
      new_ptr[i] = '\n';
-     free(ptr);
      return(new_ptr);
 }
 
+// /**
+//  * @brief function reallocates mem for temp if including the     
+//  *        len of temp_ptr(static)
+//  *        puts content from temp_ptr to temp
+//  * @param temp 
+//  * @param BUFFER 
+//  * @return char* 
+//  */
+// char *realloc_temp_outside_loop(char *temp, int BUFFER, char *temp_ptr)
+// {
+//      char *new_ptr;
+//      int i = 0;
+
+//      new_ptr = (char *) malloc (BUFFER + ft_strlen(temp_ptr));
+//      if(!temp || !new_ptr)
+//      {
+//           free(new_ptr);
+//           free(temp);
+//           return(NULL);
+//      }
+//      while (i < ft_strlen(temp_ptr))	//((BUFFER * mem) + ))
+//      {
+//           new_ptr[i] = temp_ptr[i];
+//           i++;
+//      }
+//      free(temp_ptr);
+//      return (new_ptr);
+// }
+
+// /**
+//  * @brief	funcion allocates mem based on strlen of temp + always one BUFFER
+//  * 		purs old content in new allocated ptr 
+//  * @param temp 
+//  * @param BUFFER 
+//  * @return char* 
+//  */
+// char *realloc_temp_inside_loop(char *temp, int BUFFER)
+// {
+// 	char *new_ptr;
+// 	int i = 0;
+
+// 	new_ptr = (char *) malloc (ft_strlen(temp) + BUFFER);
+// 	if (!new_ptr)
+// 	{
+// 		free(new_ptr);
+// 		free(temp);
+// 		return (NULL);
+// 	}
+// 	while (i < ft_strlen(temp))
+// 	{
+// 		new_ptr[i] = temp[i];
+// 		i++;
+// 	}
+// 	free(temp);
+// 	return (new_ptr);
+// }
+
 /**
- * @brief function reallocates mem for temp if including the     
- *        len of temp_ptr(static)
- *        puts content from temp_ptr to temp
- * @param temp 
- * @param BUFFER 
+ * @brief function reallocates mem based on the lengh of passed string
+ *		adds always one BUFFER_SIZE to the lengh of the actual string
+ *		frees previouse ptr
+ *		content gets copied too
+ * @param string 
+ * @param size normal write BUFFER_SIZE
+ * @copy_content 	if 1 -> content gets copied
+ *				if 0 -> no copy content 
  * @return char* 
  */
-char *realloc_temp_outside_loop(char *temp, int BUFFER, char *temp_ptr)
-{
-     char *new_ptr;
-     int i = 0;
-
-     new_ptr = (char *) malloc (BUFFER + ft_strlen(temp_ptr));
-     if(!temp || !new_ptr)
-     {
-          free(new_ptr);
-          free(temp);
-          return(NULL);
-     }
-     while (i < ft_strlen(temp_ptr))	//((BUFFER * mem) + ))
-     {
-          new_ptr[i] = temp_ptr[i];
-          i++;
-     }
-     free(temp);
-     return (new_ptr);
-}
-
-/**
- * @brief	funcion allocates mem based on strlen of temp + always one BUFFER
- * 		purs old content in new allocated ptr 
- * @param temp 
- * @param BUFFER 
- * @return char* 
- */
-char *realloc_temp_inside_loop(char *temp, int BUFFER)
+char *reallocate(char *string, int size, int copy_content)
 {
 	char *new_ptr;
 	int i = 0;
-
-	new_ptr = (char *) malloc (ft_strlen(temp) + BUFFER);
-	if (!new_ptr)
+	
+	new_ptr = (char *) malloc(ft_strlen(string) + size);
+	if(!new_ptr || !string)
 	{
 		free(new_ptr);
-		free(temp);
-		return (NULL);
+		free(string);
+		return(NULL);
 	}
-	while (i < ft_strlen(temp))
+	if (copy_content == 1)
 	{
-		new_ptr[i] = temp[i];
-		i++;
+		while (i < ft_strlen(string))
+		{
+			new_ptr[i] = string[i];
+			i++;
+		}
+		printf("FUNC: %s\n\n", new_ptr);
 	}
-	free(temp);
-	return (new_ptr);
+	free(string);
+	return(new_ptr);
 }
+
 
 /**
  * @brief function puts content in new allocated pointer with new size
@@ -247,7 +325,7 @@ char *get_next_line(int fd)
      }
 	temp = "";
      if (ft_strlen(temp_ptr) != 0) //there is something in temp_ptr
-          temp = realloc_temp_outside_loop(temp, BUFFER_SIZE, temp_ptr);
+          temp = reallocate(temp, BUFFER_SIZE, 1);
 
 
      val = read(fd, ptr, BUFFER_SIZE);
@@ -255,16 +333,17 @@ char *get_next_line(int fd)
 
      while (val > 0 && ft_strchr(ptr, '\n') == NULL)
 	{
-
-		temp = ft_strjoin(temp, ptr);
-		temp = realloc_temp_inside_loop(temp, BUFFER_SIZE);
+		printf("1 RRRR: %s\n", temp);
+		temp = ft_strjoin(temp, ptr);		// gets null terminated ->-> problemo grande
+		printf("2 RRRR: %s\n", temp);
+		temp = reallocate(temp, BUFFER_SIZE, 1);
 		if(!temp)
 		{
 			free(ptr);	//?
 			return(NULL);
 		}
+		ptr = reallocate(ptr, 0, 0);
 		val = read(fd, ptr, BUFFER_SIZE);
-
 	}
 	if (val == 0)
 	{
@@ -280,13 +359,14 @@ char *get_next_line(int fd)
 	printf("TEMP: %s\n", temp);
 	printf("PTR: %s\n", ptr);
 
+	printf("1 temp: %s\n", temp);
 
      temp = ft_strjoin(temp, new_line_cutter(ptr));
+	printf("2 temp: %s\n", temp);
+     temp_ptr = temp_ptr_content(ptr, temp_ptr);
 
-     temp_ptr = ft_strchr(ptr, '\n');
-
-
-     printf("try: %s\n", try(temp, ptr));
+	
+     //printf("try: %s\n", try(temp, ptr));
 
 	// cut ptr in half and maybe at the and '\n'
 
