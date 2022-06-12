@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/12 03:32:07 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:41:37 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,8 +393,10 @@ char *get_next_line(int fd)
 	printf("----------- out loop ----------------\n\n");
 	if (val == 0)
 	{
-		printf("! TEMP: %s\n", temp);
+		printf("ptr: %s\n", ptr);
+		show_new_line(ptr);
 		show_new_line(temp);
+
 		temp = ft_strjoin(temp, new_line_cutter(ptr));
 		if(ft_strlen(temp) != 0)
 			return(temp);
