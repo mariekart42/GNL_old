@@ -6,11 +6,12 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/12 03:28:00 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:32:07 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdlib.h>
 
 /**
  * @brief function shows all '\n' characters
@@ -459,5 +460,10 @@ printf("-------- 6 -------------\n\n");
      // char *ptr6;
      // ptr6 = get_next_line(fd);
      // printf("MAIN_6: %s\n", ptr6);
-
+	free(ptr1);
+	free(ptr2);
+	free(ptr3);
+	free(ptr4);
+	// free(ptr5);
+	// free(ptr6);
 }
