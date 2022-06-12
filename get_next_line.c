@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/12 03:41:37 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/12 14:22:06 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,26 @@ void	show_new_line(char *string)
 }
 
 
+
+void free_func(char *temp, char* temp_ptr, char *ptr)
+{
+     if(temp)
+     {
+          free(temp);
+          temp = NULL;
+     }
+     if(temp_ptr)
+     {
+          free(temp_ptr);
+          temp_ptr = NULL;
+     }
+     if(ptr)
+     {
+          free(ptr);
+          ptr = NULL;
+     }
+}
+
 /**
  * @brief function returns ptr content after first '\n' and before the next '\n'
  * 
@@ -69,7 +89,7 @@ char *temp_ptr_content(char *ptr, char *temp_ptr)
 	i++;		// was '\n'
 
 	k = i;
-	printf("ptr; %s\n", ptr +i);
+	//printf("ptr; %s\n", ptr +i);
 	while (ptr[k] != '\n')
 	{
 		count++;
@@ -169,9 +189,14 @@ char *new_line_cutter(char *ptr)
      }
      while (ptr[i] != '\n')
      {
+          
+          if (i == ft_strlen(ptr)) // means there is no '\n'
+          {
+               return(NULL);
+          }
           i++;
      }
-	printf("!!i; %d\n",i);
+	//printf("!!i; %d\n",i);
      new_ptr = (char *) malloc(i+1);
 	k = i;
      i = 0;
@@ -179,7 +204,7 @@ char *new_line_cutter(char *ptr)
      {
           new_ptr[i] = ptr[i];
           i++;
-		printf("iteration: %d\n", i);
+		//printf("iteration: %d\n", i);
      }
      new_ptr[i] = '\0';
 
@@ -261,10 +286,10 @@ char *reallocate(char *string, int size, int copy_content)
 	int i = 0;
 	
 	new_ptr = (char *) malloc(ft_strlen(string) + size);
-	if(copy_content == 0)
-		printf("LEN_PTR: %zu\n\n", ft_strlen(string));
-	if(copy_content == 1)
-		printf("LEN_TEMP: %zu\n\n", ft_strlen(string));
+	// if(copy_content == 0)
+	// 	printf("LEN_PTR: %zu\n\n", ft_strlen(string));
+	// if(copy_content == 1)
+	// 	printf("LEN_TEMP: %zu\n\n", ft_strlen(string));
 	if(!new_ptr || !string)
 	{
 		free(new_ptr);
@@ -278,7 +303,7 @@ char *reallocate(char *string, int size, int copy_content)
 			new_ptr[i] = string[i];
 			i++;
 		}
-		printf("FUNC: %s\n\n", new_ptr);
+		//printf("FUNC: %s\n\n", new_ptr);
 	}
 	free(string);	//?
 	return (new_ptr);
@@ -326,7 +351,8 @@ char *get_next_line(int fd)
      // val takes return value from read function
      int val;
 
-
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
      // temp_ptr stores the content of previouse function callings
      static char *temp_ptr;
      // allocating mem depending on if temp_ptr is already used before of not
@@ -377,7 +403,7 @@ char *get_next_line(int fd)
 		temp = ft_strjoin(temp, temp_ptr);
      val = read(fd, ptr, BUFFER_SIZE);
 
-	printf("----------- in loop ----------------\n\n");
+	//printf("----------- in loop ----------------\n\n");
      while (val > 0 && ft_strchr(ptr, '\n') == NULL)
 	{
 		temp = ft_strjoin(temp, ptr);
@@ -390,16 +416,24 @@ char *get_next_line(int fd)
 		}
 		val = read(fd, ptr, BUFFER_SIZE);
 	}
-	printf("----------- out loop ----------------\n\n");
+	//printf("----------- out loop ----------------\n\n");
 	if (val == 0)
 	{
-		printf("ptr: %s\n", ptr);
-		show_new_line(ptr);
-		show_new_line(temp);
+		//printf("ptr: %s\n", ptr);
+		//show_new_line(ptr);
+		//show_new_line(temp);
 
 		temp = ft_strjoin(temp, new_line_cutter(ptr));
+          if(! temp)
+          {
+               return(NULL);
+          }
 		if(ft_strlen(temp) != 0)
-			return(temp);
+          {
+               free(temp_ptr);
+               return(temp);
+          }
+			
 		return(NULL);
 		// return vals checke what if there is no '\n' at the end etc
 	}
@@ -439,33 +473,38 @@ printf("-------- 1 -------------\n\n");
      ptr1 = get_next_line(fd);
      printf("MAIN_1: %s\n", ptr1);
 	show_new_line(ptr1);
+     //free(ptr1);
 printf("-------- 2 -------------\n\n");
      char *ptr2;
      ptr2 = get_next_line(fd);
      printf("MAIN_2: %s\n", ptr2);
 	show_new_line(ptr2);
+     //free(ptr2);
 printf("-------- 3 -------------\n\n");
      char *ptr3;
      ptr3 = get_next_line( fd);
      printf("MAIN_3: %s\n", ptr3);
 	show_new_line(ptr3);
+     //free(ptr3);
 printf("-------- 4 -------------\n\n");
      char *ptr4;
      ptr4 = get_next_line(fd);
      printf("MAIN_4: %s\n", ptr4);
 	show_new_line(ptr4);
+     //free(ptr4);
 printf("-------- 5 -------------\n\n");
-     // char *ptr5;
-     // ptr5 = get_next_line(fd);
-     // printf("MAIN_5: %s\n", ptr5);
+     char *ptr5;
+     ptr5 = get_next_line(fd);
+     printf("MAIN_5: %s\n", ptr5);
+     //free(ptr5);
 printf("-------- 6 -------------\n\n");
      // char *ptr6;
      // ptr6 = get_next_line(fd);
      // printf("MAIN_6: %s\n", ptr6);
-	free(ptr1);
-	free(ptr2);
-	free(ptr3);
-	free(ptr4);
-	// free(ptr5);
+	
+	
+	
+	
+	
 	// free(ptr6);
 }

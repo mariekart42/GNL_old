@@ -15,4 +15,8 @@ g:
 	@$(CC) $(FLAGS) $(BUFFER_EXC=BUFFER_SIZE) $(MAN_FILES) 
 	@./a.out
 
-.PHONY: g
+r:
+	@$(CC) $(FLAGS) $(BUFFER_EXC=BUFFER_SIZE) $(MAN_FILES)
+	@./a.out /dev/tty
+
+.PHONY: g r
