@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   same_but_clean.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/13 01:28:28 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/13 02:23:06 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ char *new_line_cutter(char *ptr)
  * @param ptr 
  * @return char* 
  */
-char *temp_ptr_content(char *ptr, char *temp_ptr)
+char *temp_ptr_content(char *ptr, char *temp_ptr)		// no need for temp_ptr?
 {
      int i = 0;
 	int k = 0;
@@ -157,7 +157,7 @@ char *temp_ptr_content(char *ptr, char *temp_ptr)
 	new_ptr = (char *) malloc(count);
 	if(!new_ptr)
 	{
-		free(new_ptr);
+		//free(new_ptr);
 		return(NULL);
 	}
 	k = 0;
@@ -167,151 +167,76 @@ char *temp_ptr_content(char *ptr, char *temp_ptr)
 		k++;
 		i++;
 	}
-	free(temp_ptr);	//?
+	//free(temp_ptr);	//?
 	free(ptr);
 	return (new_ptr);
 }
 
 
 
-char *func_for_reading(char *temp_ptr, char *temp, int fd)
+char *func_for_reading(char *temp, int fd)
 {
 	int val;
 	char *ptr;
+     static char *temp_ptr;
+     // allocating mem depending on if temp_ptr is already used before of not
+     if (temp_ptr == 0)       // if its the first calling -> normal BUFF size
+     {
+          temp_ptr = (char *) malloc (BUFFER_SIZE);
+          if (!temp_ptr)
+               return (NULL);
+     }
+	//printf("temp: %s\n", temp);
+	if (ft_strlen(temp_ptr) != 0)
+		temp = ft_strjoin(temp, temp_ptr);
 	
-	ptr = (char *) malloc(BUFFER_SIZE);
+	
+	ptr = (char *) ft_calloc(BUFFER_SIZE, sizeof(char));
      if (!ptr)
      {
           free_func(temp_ptr, temp, 0);
           return (NULL);
      }
+	
+	
 	val = read(fd, ptr, BUFFER_SIZE);
-	while (val > 0)
+	// if(*temp == '\0')
+	// 	printf(GRN"YEEE\n"RESET);
+	// printf("ptr: %s\n", ptr);
+	// printf("val: %d\n", val);
+	// show_new_line(ptr, "PTR");
+	while (val > 0 && ft_strchr(ptr, '\n') == NULL)
 	{
-		if (ft_strchr(ptr, '\n') != NULL)	// there is a '\n'
-		{
-			temp = ft_strjoin(temp, new_line_cutter(ptr));
-			temp[ft_strlen(temp)] = '\n';
-			temp_ptr = temp_ptr_content(ptr, temp_ptr);
-			return (temp);
-		}
+
+		temp = ft_strjoin(temp, ptr);
+		printf("temp loop: %s\n", temp);
+		val = read(fd, ptr, BUFFER_SIZE);
+	}
+
+	if (val == 0 && ft_strchr(temp, '\n') != NULL)
+	{
+		temp = new_line_cutter(temp);	//?
+		temp[ft_strlen(temp)] = '\n';
+		//temp_ptr = temp_ptr_content(temp, 0);
+		return(temp);
 	}
 	
-	
+
+	printf("ptr: %s\n", ptr);
+
+	temp = ft_strjoin(temp, new_line_cutter(ptr));
+	temp[ft_strlen(temp)] = '\n';
+	printf("temp: %s\n", temp);
+	show_new_line(temp, "TEMP");
+	printf("LOLOLOLtemp_ptr: %s\n", temp_ptr);
+	temp_ptr = temp_ptr_content(temp, temp_ptr);
+	printf("LOLOLOLtemp_ptr: %s\n", temp_ptr);
+	return (temp);
+
+	return(NULL);
 }
 
 
-
-
-
-
-
-
-
-
-// char *try(char *temp, char *ptr)
-// {
-//      char *new_ptr;
-//      char *new_temp;
-//      char *test_new_ptr;
-//      int i = 0;
-     
-//      if (ptr[0] == '\n')
-//      {
-//           new_temp = (char *) malloc(1);
-//           new_temp[0] = '\n'; // so while loop gets skipped
-//      }
-//      new_temp = (char *) malloc(ft_strlen(ptr) - ft_strlen(ft_strchr(ptr, '\n')) + 1);
-//      if (!new_temp)
-//           return(NULL);
-//      while (ptr[i] != '\n')
-//      {
-//           new_temp[i] = ptr[i];
-//           i++;
-//      }
-//      new_temp[i] = '\n';     
-//      new_ptr = ft_strchr(ptr, '\n');
-//      new_ptr += 1;
-//      new_new_ptr = ft_strchr(new_ptr, '\n');
-//      if(test_new_ptr != NULL)
-//      {
-//           new_ptr[ft_strlen(ptr) - ft_strlen(test_new_ptr)] = '\0';    // right place?
-//           new_ptr = ft_substr(new_ptr);
-//      }
-//      free(new_new_ptr);
-//      if(p == 1)
-//      {
-//           free()
-//           return(new_temp);
-
-//      }
-//      if(p == 2)
-//      {
-
-//           return(new_ptr);
-//      }
-// }
-
-
-
-
-
-// /**
-//  * @brief function reallocates mem for temp if including the     
-//  *        len of temp_ptr(static)
-//  *        puts content from temp_ptr to temp
-//  * @param temp 
-//  * @param BUFFER 
-//  * @return char* 
-//  */
-// char *realloc_temp_outside_loop(char *temp, int BUFFER, char *temp_ptr)
-// {
-//      char *new_ptr;
-//      int i = 0;
-
-//      new_ptr = (char *) malloc (BUFFER + ft_strlen(temp_ptr));
-//      if(!temp || !new_ptr)
-//      {
-//           free(new_ptr);
-//           free(temp);
-//           return(NULL);
-//      }
-//      while (i < ft_strlen(temp_ptr))	//((BUFFER * mem) + ))
-//      {
-//           new_ptr[i] = temp_ptr[i];
-//           i++;
-//      }
-//      free(temp_ptr);
-//      return (new_ptr);
-// }
-
-// /**
-//  * @brief	funcion allocates mem based on strlen of temp + always one BUFFER
-//  * 		purs old content in new allocated ptr 
-//  * @param temp 
-//  * @param BUFFER 
-//  * @return char* 
-//  */
-// char *realloc_temp_inside_loop(char *temp, int BUFFER)
-// {
-// 	char *new_ptr;
-// 	int i = 0;
-
-// 	new_ptr = (char *) malloc (ft_strlen(temp) + BUFFER);
-// 	if (!new_ptr)
-// 	{
-// 		free(new_ptr);
-// 		free(temp);
-// 		return (NULL);
-// 	}
-// 	while (i < ft_strlen(temp))
-// 	{
-// 		new_ptr[i] = temp[i];
-// 		i++;
-// 	}
-// 	free(temp);
-// 	return (new_ptr);
-// }
 
 /**
  * @brief function reallocates mem based on the lengh of passed string
@@ -330,10 +255,7 @@ char *reallocate(char *string, int size, int copy_content)
 	int i = 0;
 	
 	new_ptr = (char *) malloc(ft_strlen(string) + size);
-	// if(copy_content == 0)
-	// 	printf("LEN_PTR: %zu\n\n", ft_strlen(string));
-	// if(copy_content == 1)
-	// 	printf("LEN_TEMP: %zu\n\n", ft_strlen(string));
+
 	if(!new_ptr || !string)
 	{
 		free(new_ptr);
@@ -354,98 +276,36 @@ char *reallocate(char *string, int size, int copy_content)
 }
 
 
-// /**
-//  * @brief function puts content in new allocated pointer with new size
-//  * 
-//  * @param temp_ptr 
-//  * @param BUFFER 
-//  * @return char* 
-//  */
-// char *realloc_temp_ptr(char *temp_ptr, int BUFFER)
-// {
-//      char *new_ptr;
-//      int i = 0;
-
-//      if (!temp_ptr)
-//      {
-//           free(temp_ptr);
-//           return(NULL);
-//      }
-//      new_ptr = (char *) malloc (BUFFER + ft_strlen(temp_ptr));
-//      if (!new_ptr)
-//      {
-//           free(new_ptr);
-//           free(temp_ptr);
-//           return(NULL);
-//      }
-//      while (i < (BUFFER + ft_strlen(temp_ptr)))
-//      {
-//           new_ptr[i] = temp_ptr[i];
-//           i++;
-//      }
-//      free(temp_ptr);
-//      return (new_ptr);
-// }
-
 
 char *get_next_line(int fd)
 {
      int mem = 1;
 
-     // val takes return value from read function
      int val;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-     // temp_ptr stores the content of previouse function callings
-	     static char *temp_ptr;
-	     // allocating mem depending on if temp_ptr is already used before of not
-	     if (temp_ptr == 0)       // if its the first calling -> normal BUFF size
-	     {
-	          temp_ptr = (char *) malloc (BUFFER_SIZE);
-	          if (!temp_ptr)
-	          {
-	               return (NULL);
-	          }
-	          // CHANGED -> temp_ptr = "";      // so it can be used it join (see 'test_join.c') -> works!
-	     }
-	
-     // // dump shit i guess:
-     // else      // if there was min 1 prev call -> BUFF size + len of temp_ptr PLUS reallocating
+		
+     // static char *temp_ptr;
+     // // allocating mem depending on if temp_ptr is already used before of not
+     // if (temp_ptr == 0)       // if its the first calling -> normal BUFF size
      // {
-     //      temp_ptr = realloc_temp_ptr(temp_ptr, BUFFER_SIZE);
+     //      temp_ptr = (char *) malloc (BUFFER_SIZE);
      //      if (!temp_ptr)
-     //      {
-     //           //free(temp_ptr); -> not free here! already freed in function
-     //           return(NULL);
-     //      }
-     //      
+     //           return (NULL);
      // }
 
-
-	     // // ptr has content of .txt file in amount of BUFFERSIZE
-	     // char *ptr;
-	     // ptr = (char *) malloc(BUFFER_SIZE);
-	     // if (!ptr)
-	     // {
-	     //      free_func(temp_ptr, 0, 0);
-	     //      return (NULL);
-	     // }
-
-     // temp stores previouse content of ptr in loop -> temp_ptr
      char *temp;
      temp = (char *) malloc (BUFFER_SIZE * sizeof(char));
      if(!temp)
      {
-		free_func(temp_ptr, 0, 0);
-          // free(ptr);
-          // free(temp_ptr);
+		//free_func(temp_ptr, 0, 0);
           return (NULL);
      }
 	*temp = '\0';		// def do it like this!!
-	//printf("TEMP_PTR: %s\n", temp_ptr);
-	if (ft_strlen(temp_ptr) != 0)
-		temp = ft_strjoin(temp, temp_ptr);
+	
+	// if (ft_strlen(temp_ptr) != 0)
+	// 	temp = ft_strjoin(temp, temp_ptr);
 		
 		
 
@@ -543,25 +403,10 @@ char *get_next_line(int fd)
 // //_______________________________________________________________________
 
 
-	printf("before temp_ptr: %s\n", temp_ptr);
-	temp = func_for_reading(temp_ptr, temp, fd);
-	printf("after temp_ptr: %s\n", temp_ptr);
-
-
-     // temp = ft_strjoin(temp, new_line_cutter(ptr));
-	// temp[ft_strlen(temp)] = '\n';
-	// printf("PPPPTR: %s\n", ptr);
-	// //show_new_line(ptr, "ptr");
-     // temp_ptr = temp_ptr_content(ptr, temp_ptr);
-//temp_ptr = temp_ptr_content(ptr, temp_ptr);
-	
-     // //printf("try: %s\n", try(temp, ptr));
-
-	// // cut ptr in half and maybe at the and '\n'
-
-	// printf("end_func_TEMP_PTR: %s\n", temp_ptr);
-//return(temp);
-	//return (func_for_reading(temp_ptr, temp, fd));
+	//printf("before temp_ptr: %s\n", temp_ptr);
+	temp = func_for_reading(temp, fd);
+	//printf("after temp_ptr: %s\n", temp_ptr);
+	return(temp);
 }
 
 int main()
@@ -572,38 +417,34 @@ printf("-------- 1 -------------\n\n");
      ptr1 = get_next_line(fd);
      printf("MAIN_1: %s\n", ptr1);
 	show_new_line(ptr1, "main 1");
-     //free(ptr1);
+     free(ptr1);
 printf("-------- 2 -------------\n\n");
      char *ptr2;
      ptr2 = get_next_line(fd);
      printf("MAIN_2: %s\n", ptr2);
 	show_new_line(ptr2, "main 2");
-     //free(ptr2);
+     free(ptr2);
 printf("-------- 3 -------------\n\n");
      char *ptr3;
      ptr3 = get_next_line(fd);
      printf("MAIN_3: %s\n", ptr3);
 	show_new_line(ptr3, "main 3");
-     //free(ptr3);
-printf("-------- 4 -------------\n\n");
-     char *ptr4;
-     ptr4 = get_next_line(fd);
-     printf("MAIN_4: %s\n", ptr4);
-	show_new_line(ptr4, "main 4");
-     //free(ptr4);
-printf("-------- 5 -------------\n\n");
-     char *ptr5;
-     ptr5 = get_next_line(fd);
-     printf("MAIN_5: %s\n", ptr5);
-     free(ptr5);
-printf("-------- 6 -------------\n\n");
-     char *ptr6;
-     ptr6 = get_next_line(fd);
-     printf("MAIN_6: %s\n", ptr6);
-	
-	
-	
-	
-	
-	free(ptr6);
+     free(ptr3);
+// printf("-------- 4 -------------\n\n");
+//      char *ptr4;
+//      ptr4 = get_next_line(fd);
+//      printf("MAIN_4: %s\n", ptr4);
+// 	show_new_line(ptr4, "main 4");
+//      //free(ptr4);
+// printf("-------- 5 -------------\n\n");
+//      char *ptr5;
+//      ptr5 = get_next_line(fd);
+//      printf("MAIN_5: %s\n", ptr5);
+//      free(ptr5);
+// printf("-------- 6 -------------\n\n");
+//      char *ptr6;
+//      ptr6 = get_next_line(fd);
+//      printf("MAIN_6: %s\n", ptr6);
+
+// 	free(ptr6);
 }

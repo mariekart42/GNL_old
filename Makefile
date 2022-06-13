@@ -6,6 +6,8 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 MAN_FILES = get_next_line.c get_next_line_utils.c
 
+CLEAN_FILES = same_but_clean.c get_next_line_utils.c
+
 # mod buffer size here:
 BUFFER_SIZE= 42
 
@@ -15,8 +17,8 @@ g:
 	@$(CC) $(FLAGS) $(BUFFER_EXC=BUFFER_SIZE) $(MAN_FILES) 
 	@./a.out
 
-r:
-	@$(CC) $(FLAGS) $(BUFFER_EXC=BUFFER_SIZE) $(MAN_FILES)
+c:
+	@$(CC) $(FLAGS) $(BUFFER_EXC=BUFFER_SIZE) $(CLEAN_FILES)
 	@./a.out /dev/tty
 
-.PHONY: g r
+.PHONY: g c

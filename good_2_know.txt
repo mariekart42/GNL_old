@@ -9,3 +9,5 @@
 
 -    do not initialize an empty string like thi   *ptr = "";  (undefined behaviour! + gets in the 'read-only' area)
      -> do it like this   *ptr = '\0'
+
+    -     no need to free a NULL pointer
