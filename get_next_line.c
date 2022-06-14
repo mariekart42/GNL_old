@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/13 01:28:28 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/13 23:37:29 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	show_new_line(char *string, char *content)
 	printf("-> %s\n", content);
 	if (!string)
 		return ;
-	len = strlen(string);
+	len = strlen(string)+10;
 	i = 0;
 	ptr = strdup(string);
 	if (!strchr(ptr, '\n'))
@@ -48,7 +48,7 @@ void	show_new_line(char *string, char *content)
 	{
 		if (ptr[i] == '\n')
 			printf(GRN"'\\n'"RESET);
-		if(ptr[i] == '\0')
+		if (ptr[i] == '\0')
 			printf(BLU"'\\0'"RESET);
 		else
 			printf("%c", ptr[i]);
@@ -155,7 +155,7 @@ char *temp_ptr_content(char *ptr, char *temp_ptr)
 		k++;
 	}
 	new_ptr = (char *) malloc(count);
-	if(!new_ptr)
+	if (!new_ptr)
 	{
 		free(new_ptr);
 		return(NULL);
@@ -434,7 +434,7 @@ char *get_next_line(int fd)
 
      // temp stores previouse content of ptr in loop -> temp_ptr
      char *temp;
-     temp = (char *) malloc (BUFFER_SIZE * sizeof(char));
+     temp = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
      if(!temp)
      {
 		free_func(temp_ptr, 0, 0);
