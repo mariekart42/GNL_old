@@ -1,0 +1,2 @@
+-	return val if val == 0
+-	weird output when BUFFER == 10 or 20
