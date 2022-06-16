@@ -6,13 +6,11 @@
 /*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 16:25:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/09 15:27:05 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/16 11:25:13 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-
 
 /**
  * @brief function connects to given strings and allocates
@@ -67,81 +65,6 @@ size_t	ft_strlen(const char *str)
 }
 
 /**
- * @brief   function copies str2(str2) into dest(str1) array
-            does not check the validity of the destination buffer
-            copies the data first to an intermediate buffer, then from the 
-            buffer to destination
-            -> similar to memcpy but better
-			one of dst or src can be NULL but not both!
- * @param str1 destination string
- * @param str2 str2 string
- * @param n up to how many characters get copied 
- * @return void* 
- */
-
-void	rev_func(size_t i, size_t n, char *st1, char *st2)
-{
-	while (i < n)
-	{
-		st1[i] = st2[i];
-		i++;
-	}
-}
-
-void	*ft_memmove(void *str1, const void *str2, size_t n)
-{
-	size_t	i;
-	int		rev_i;
-	char	*st1;
-	char	*st2;
-
-	if (!str1 && !str2)
-		return (NULL);
-	i = 0;
-	rev_i = n - 1;
-	st1 = (char *)str1;
-	st2 = (char *)str2;
-	if (str1 < str2)
-	{
-		rev_func(i, n, st1, st2);
-		return (str1);
-	}
-	while (i++ < n)
-	{
-		st1[rev_i] = st2[rev_i];
-		rev_i--;
-	}
-	return (str1);
-}
-
-/**
- * @brief	function searches for the first occurrence of the character 
-			c in the first n bytes in str
- * @param str string i that c gets searched
- * @param c the character that should get found
- * @param n up to how many characters we are searching
- * @return void* 
- */
-void	*ft_memchr(const void *str, int c, size_t n)
-{
-	unsigned char	*ptr;
-	size_t			i;
-
-	ptr = (unsigned char *) str;
-	i = 0;
-	while (i < n)
-	{
-		if (ptr[i] == (unsigned char) c)
-		{
-			return ((void *) ptr + i);
-		}
-		i++;
-	}
-	return ((void *) '\0');
-}
-
-
-/**
  * @brief   function searches for the FIRST occurrence in str for character c
             if str doesnt end with NUL program might crash 
  * @param str string where c should get found
@@ -170,34 +93,33 @@ char	*ft_strchr(const char *str, int c)
 }
 
 
-/**
- * @brief function duplicates a string and return a pointer pointing to the 
- * first byte of copied string 
- * memory reserved with malloc
- * 
- * @param src pointer to string that gets copied
- * @return char* 
- */
-char	*ft_strdup(char *src)
-{
-	int		size;
-	char	*ptr;
-	int		i;
+// /**
+//  * @brief function duplicates a string and return a pointer pointing to the 
+//  * first byte of copied string 
+//  * memory reserved with malloc
+//  * 
+//  * @param src pointer to string that gets copied
+//  * @return char* 
+//  */
+// char	*ft_strdup(char *src)
+// {
+// 	int		size;
+// 	char	*ptr;
+// 	int		i;
 
-	i = 0;
-	size = ft_strlen(src) + 1;
-	ptr = (char *) malloc(size * sizeof(char));
-	if (!ptr)
-		return (NULL);
-	while (src[i] != '\0')
-	{
-		ptr[i] = src[i];
-		i++;
-	}
-	ptr[i] = '\0';
-	return (ptr);
-}
-
+// 	i = 0;
+// 	size = ft_strlen(src) + 1;
+// 	ptr = (char *) malloc(size * sizeof(char));
+// 	if (!ptr)
+// 		return (NULL);
+// 	while (src[i] != '\0')
+// 	{
+// 		ptr[i] = src[i];
+// 		i++;
+// 	}
+// 	ptr[i] = '\0';
+// 	return (ptr);
+// }
 
 /**
  * @brief	function allocates 'nitems' bytes of memory, each in size of 'size' 
@@ -220,7 +142,6 @@ void	*ft_calloc(size_t count, size_t size)
 	ft_bzero(output, count * size);
 	return (output);
 }
-
 
 /**
  * @brief	function erases the data in the n bytes of the memory
