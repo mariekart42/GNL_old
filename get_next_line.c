@@ -5,15 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/15 23:46:24 by mmensing         ###   ########.fr       */
+/*   Created: 2022/06/19 01:03:25 by mmensing          #+#    #+#             */
+/*   Updated: 2022/06/20 01:04:55 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 /**
  * @brief function shows all '\n' characters
@@ -27,7 +24,7 @@
 	# endif
  * 
  * @param string 
- */
+*/
 void	show_new_line(char *string, char *content)
 {
 	int		len;
@@ -36,16 +33,22 @@ void	show_new_line(char *string, char *content)
 
 	printf(YEL"\n------------------------->\n"RESET);
 	printf("-> %s\n", content);
-	if (!string)
+	if(string == NULL)
+	{
+		printf(MAG"(NULL)"RESET);
+		printf(YEL"\n<-------------------------\n\n"RESET);
 		return ;
+	}
 	len = strlen(string);
 	i = 0;
 	ptr = strdup(string);
 	if (!strchr(ptr, '\n'))
 		printf(MAG "-> no newline character --\n" RESET);
 	printf(YEL"RESULT: "RESET);
+
 	while (i < len)
 	{
+
 		if (ptr[i] == '\n')
 			printf(GRN"'\\n'"RESET);
 		if(ptr[i] == '\0')
@@ -55,6 +58,7 @@ void	show_new_line(char *string, char *content)
 		i++;
 	}
 	printf(YEL"\n<-------------------------\n\n"RESET);
+	free(ptr);
 }
 
 void free_func(char *ptr1, char* ptr2, char *ptr3)
@@ -90,20 +94,8 @@ char *new_line_cutter(char *ptr)
      size_t i = 0;
 	size_t k = 0;
 
-     if (ptr[0] == '\n')
-     {
-          new_ptr = (char *) malloc(1);
-		if(!new_ptr)
-		{
-			free(new_ptr);
-			return(NULL);
-		}
-          new_ptr[0] = '\0';
-          return (new_ptr);
-     }
      while (ptr[i] != '\n')
      {
-          
           if (i == ft_strlen(ptr)) // means there is no '\n'
                return(NULL);
           i++;
@@ -122,7 +114,6 @@ char *new_line_cutter(char *ptr)
 		i++;
 	}
 	new_ptr[i] = '\0';
-
      return(new_ptr);
 }
 
@@ -147,10 +138,10 @@ char *temp_ptr_content(char *ptr)
 	i++;
 
 	k = i;
-	while (ptr[k] != '\0')
+	while (ptr[k++] != '\0')
 	{
 		count++;
-		k++;
+		//k++;
 	}
 	new_ptr = (char *) ft_calloc(count+1+1, sizeof(char));
 	if(!new_ptr)
@@ -161,7 +152,7 @@ char *temp_ptr_content(char *ptr)
 	k = 0;
 	while (ptr[i] != '\0')
 	{
-		new_ptr[k] = ptr[i];
+		new_ptr[k] = ptr[i];	// new (alright like this?->shorter)
 		k++;
 		i++;
 	}
@@ -169,8 +160,8 @@ char *temp_ptr_content(char *ptr)
 	//free(ptr);
 	if(ptr[i] == '\n')
 	{
-		new_ptr[k] = '\n';
-		k++;
+		new_ptr[k++] = '\n';
+		//k++;
 	}
 
 	new_ptr[k] = '\0';
@@ -184,17 +175,20 @@ char *func_for_reading(char *temp, int fd)
 	int val;
 	char *ptr;
      static char *temp_ptr;
+	char *move;
+	char *move2;
 
 	if (temp_ptr)
 	{
+		//free_func(temp, 0, 0);
 		temp = ft_strjoin("\0", temp_ptr);
 	}
-     if (!temp_ptr)
-     {
-          temp_ptr = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
-          if (!temp_ptr)
-               return (NULL);
-     }
+     // if (!temp_ptr)
+     // {
+     //      temp_ptr = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
+     //      if (!temp_ptr)
+     //           return (NULL);
+     // }
 
 	ptr = (char *) ft_calloc(BUFFER_SIZE+1, sizeof(char));
      if (!ptr)
@@ -205,10 +199,14 @@ char *func_for_reading(char *temp, int fd)
 	
 	if (ft_strchr(temp, '\n') != NULL)
 	{
+		free_func(temp_ptr, 0, 0);
 		temp_ptr = temp_ptr_content(temp);
-
 		
-		temp = new_line_cutter(temp);
+		move = ft_strdup(temp);
+		free(temp);
+		temp = new_line_cutter(move);
+		free(move);
+
 		return(temp);
 	}
 
@@ -221,13 +219,30 @@ char *func_for_reading(char *temp, int fd)
 			temp = ft_strjoin(temp, new_line_cutter(ptr));
 			
 			temp_ptr = temp_ptr_content(ptr);
-
+			free_func(ptr, 0, 0);	//new
 			return (temp);
+			// free(temp_ptr);
+			// temp_ptr = temp_ptr_content(ptr);
+			
+			// move = new_line_cutter(ptr);
+			// free(ptr);
+			
+			// move2 = ft_strdup(temp);
+			// free(temp);
+			// temp = ft_strjoin(move2, move);
+			// free(move);
+			// free(move2);
+
+			// //free_func(ptr, 0, 0);	//new
+			// return (temp);
 		}
-		temp = ft_strjoin(temp, ptr);
+		move = ft_strjoin(temp, ptr);
+		free_func(temp, 0, 0);
+		temp = ft_strdup(move);
+		free(move);
+		//temp = ft_strjoin(temp, ptr);
 		
 		val = read(fd, ptr, BUFFER_SIZE);
-
 	}
 	if (val < 0)
 	{
@@ -240,11 +255,16 @@ char *func_for_reading(char *temp, int fd)
 		{
 			temp[ft_strlen(temp)] = '\0';
 			ft_bzero(temp_ptr, ft_strlen(temp_ptr));
-			free(temp_ptr);
+			free_func(temp_ptr, ptr, 0);
 			return (temp);
 		}
 		else
+		{
+			// ft_bzero(temp_ptr, ft_strlen(temp_ptr));
+			// free(temp_ptr);
 			return (NULL);
+		}
+			
 		
 	}
 	
@@ -293,31 +313,38 @@ char *reallocate(char *string, int size, int copy_content)
 
 char *get_next_line(int fd)
 {
+	char *not_null;
+     char *temp;
+	
+	
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-
-     char *temp;
-     temp = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
-     if(!temp)
-     {
+		
+	not_null = (char *) ft_calloc(1, sizeof(char));
+     if (!not_null)
           return (NULL);
-     }
-	*temp = '\0';
-
-	temp = func_for_reading(temp, fd);
-	return(temp);
+		
+	*not_null = '\0';
+	
+	temp = func_for_reading(not_null, fd);
+	
+	//free(not_null);
+	
+	return (temp);
 }
 
 int main()
 {
-     int fd = open("test2.txt", O_RDONLY);
+     int fd = open("test2.txt", O_RDONLY, 0);
+	 printf("fd: %d\n", fd);
 	int i = 1;
 	char *ptr;
 	
-	while(i < 8)
+	while (i < 8)
 	{
 		ptr = get_next_line(fd);
 		printf("Ptr %d: %s\n", i, ptr);
+		show_new_line(ptr, "MAIN");
 		free(ptr);
 		i++;
 	}
