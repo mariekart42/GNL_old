@@ -1,2 +1,5 @@
--	return val if val == 0
--	weird output when BUFFER == 10 or 20
+-	"just" some leaks
+-	weird output when BUFFER == 10
+-    test: does it work when compiling -D etc BUFFER in commandline?
+-    after free set pointer to NULL -> try 
+-     DEBUGGER try to copy paste all functions from utilis in get_next_line.h

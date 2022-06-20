@@ -1,17 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   Laptop_gnl.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2022/06/19 01:03:25 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/20 15:07:02 by mmensing         ###   ########.fr       */
-=======
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/16 15:00:16 by mmensing         ###   ########.fr       */
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
+/*   Updated: 2022/06/19 14:21:59 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +94,21 @@ char *new_line_cutter(char *ptr)
      size_t i = 0;
 	size_t k = 0;
 
+     if (ptr[0] == '\n')
+     {
+          new_ptr = (char *) malloc(1);
+		if(!new_ptr)
+		{
+			free(new_ptr);
+			return(NULL);
+		}
+          new_ptr[0] = '\0';
+          return (new_ptr);
+     }
      while (ptr[i] != '\n')
      {
-          if (i == ft_strlen_mod(ptr)) // means there is no '\n'
+          
+          if (i == ft_strlen(ptr)) // means there is no '\n'
                return(NULL);
           i++;
      }
@@ -119,6 +126,7 @@ char *new_line_cutter(char *ptr)
 		i++;
 	}
 	new_ptr[i] = '\0';
+
      return(new_ptr);
 }
 
@@ -157,15 +165,9 @@ char *temp_ptr_content(char *ptr)
 	k = 0;
 	while (ptr[i++] != '\0')
 	{
-<<<<<<< HEAD
-		new_ptr[k] = ptr[i];	// new (alright like this?->shorter)
-		k++;
-		i++;
-=======
 		new_ptr[k++] = ptr[i-1];	// new (alright like this?->shorter)
 		//k++;
 		//i++;
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
 	}
 	//free(temp_ptr);	//?
 	//free(ptr);
@@ -186,20 +188,17 @@ char *func_for_reading(char *temp, int fd)
 	int val;
 	char *ptr;
      static char *temp_ptr;
-	char *move;
-	//char *move2;
 
 	if (temp_ptr)
 	{
-		//free_func(temp, 0, 0);
 		temp = ft_strjoin("\0", temp_ptr);
 	}
-     // if (!temp_ptr)
-     // {
-     //      temp_ptr = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
-     //      if (!temp_ptr)
-     //           return (NULL);
-     // }
+     if (!temp_ptr)
+     {
+          temp_ptr = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
+          if (!temp_ptr)
+               return (NULL);
+     }
 
 	ptr = (char *) ft_calloc(BUFFER_SIZE+1, sizeof(char));
      if (!ptr)
@@ -210,14 +209,10 @@ char *func_for_reading(char *temp, int fd)
 	
 	if (ft_strchr(temp, '\n') != NULL)
 	{
-		free_func(temp_ptr, 0, 0);
 		temp_ptr = temp_ptr_content(temp);
-		
-		move = ft_strdup(temp);
-		free(temp);
-		temp = new_line_cutter(move);
-		free(move);
 
+		
+		temp = new_line_cutter(temp);
 		return(temp);
 	}
 
@@ -232,28 +227,11 @@ char *func_for_reading(char *temp, int fd)
 			temp_ptr = temp_ptr_content(ptr);
 			free_func(ptr, 0, 0);	//new
 			return (temp);
-			// free(temp_ptr);
-			// temp_ptr = temp_ptr_content(ptr);
-			
-			// move = new_line_cutter(ptr);
-			// free(ptr);
-			
-			// move2 = ft_strdup(temp);
-			// free(temp);
-			// temp = ft_strjoin(move2, move);
-			// free(move);
-			// free(move2);
-
-			// //free_func(ptr, 0, 0);	//new
-			// return (temp);
 		}
-		move = ft_strjoin(temp, ptr);
-		free_func(temp, 0, 0);
-		temp = ft_strdup(move);
-		free(move);
-		//temp = ft_strjoin(temp, ptr);
+		temp = ft_strjoin(temp, ptr);
 		
 		val = read(fd, ptr, BUFFER_SIZE);
+
 	}
 	if (val < 0)
 	{
@@ -262,26 +240,15 @@ char *func_for_reading(char *temp, int fd)
 	}
 	if (val == 0)
 	{
-		if (ft_strlen_mod(temp) != 0)
+		if (ft_strlen(temp) != 0)
 		{
-<<<<<<< HEAD
-			temp[ft_strlen_mod(temp)] = '\0';
-			ft_bzero(temp_ptr, ft_strlen_mod(temp_ptr));
-			free_func(temp_ptr, ptr, 0);
-=======
 			temp[ft_strlen(temp)] = '\0';
 			ft_bzero(temp_ptr, ft_strlen(temp_ptr));
 			free_func(temp_ptr, ptr, 0);	// new
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
 			return (temp);
 		}
 		else
-		{
-			// ft_bzero(temp_ptr, ft_strlen(temp_ptr));
-			// free(temp_ptr);
 			return (NULL);
-		}
-			
 		
 	}
 	
@@ -306,7 +273,7 @@ char *reallocate(char *string, int size, int copy_content)
 	char *new_ptr;
 	size_t i = 0;
 	
-	new_ptr = (char *) malloc(ft_strlen_mod(string) + size);
+	new_ptr = (char *) malloc(ft_strlen(string) + size);
 
 	if(!new_ptr || !string)
 	{
@@ -316,7 +283,7 @@ char *reallocate(char *string, int size, int copy_content)
 	}
 	if (copy_content == 1)
 	{
-		while (i < ft_strlen_mod(string))
+		while (i < ft_strlen(string))
 		{
 			new_ptr[i] = string[i];
 			i++;
@@ -330,44 +297,27 @@ char *reallocate(char *string, int size, int copy_content)
 
 char *get_next_line(int fd)
 {
-	char *not_null;
-     char *temp;
-	
-	
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-		
-	not_null = (char *) ft_calloc(1, sizeof(char));
-     if (!not_null)
+
+     char *temp;
+     temp = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
+     if(!temp)
+     {
           return (NULL);
-		
-	*not_null = '\0';
-	
-	temp = func_for_reading(not_null, fd);
-	
-	//free(not_null);
-	
-	return (temp);
+     }
+	*temp = '\0';
+
+	temp = func_for_reading(temp, fd);
+	return(temp);
 }
 
-// int main()
-// {
-//      int fd = open("test2.txt", O_RDONLY, 0);
-// 	 printf("fd: %d\n", fd);
-// 	int i = 1;
-// 	char *ptr;
+int main()
+{
+     int fd = open("test2.txt", O_RDONLY);
+	int i = 1;
+	char *ptr;
 	
-<<<<<<< HEAD
-// 	while (i < 8)
-// 	{
-// 		ptr = get_next_line(fd);
-// 		printf("Ptr %d: %s\n", i, ptr);
-// 		show_new_line(ptr, "MAIN");
-// 		free(ptr);
-// 		i++;
-// 	}
-// }
-=======
 	while(i < 8)
 	{
 		ptr = get_next_line(fd);
@@ -377,4 +327,3 @@ char *get_next_line(int fd)
 		i++;
 	}
 }
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
