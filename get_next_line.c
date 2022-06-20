@@ -129,7 +129,7 @@ char *new_line_cutter(char *ptr)
  * @param ptr 
  * @return char* 
  */
-char *temp_ptr_content(char *ptr)
+char *temp_ptr_content(char *ptr, char *temp_ptr)
 {
      int i = 0;
 	int k = 0;
@@ -146,6 +146,7 @@ char *temp_ptr_content(char *ptr)
 		count++;
 		//k++;
 	}
+
 	new_ptr = (char *) ft_calloc(count+1+1, sizeof(char));
 	if(!new_ptr)
 	{
@@ -153,7 +154,7 @@ char *temp_ptr_content(char *ptr)
 		return(NULL);
 	}
 	k = 0;
-	while (ptr[i++] != '\0')
+	while (ptr[i] != '\0')
 	{
 		new_ptr[k] = ptr[i];	// new (alright like this?->shorter)
 		k++;
@@ -168,6 +169,9 @@ char *temp_ptr_content(char *ptr)
 	}
 
 	new_ptr[k] = '\0';
+	if(k == 0)
+		free(temp_ptr);
+
 	return (new_ptr);
 }
 
@@ -203,7 +207,7 @@ char *func_for_reading(char *temp, int fd)
 	if (ft_strchr(temp, '\n') != NULL)
 	{
 		free_func(temp_ptr, 0, 0);
-		temp_ptr = temp_ptr_content(temp);
+		temp_ptr = temp_ptr_content(temp, 0);
 		
 		move = ft_strdup(temp);
 		free(temp);
@@ -219,10 +223,11 @@ char *func_for_reading(char *temp, int fd)
 	{
 		if (ft_strchr(ptr, '\n') != NULL)
 		{
-			temp = ft_strjoin(temp, new_line_cutter(ptr));
+			move = ft_strdup(ptr);
+			temp = ft_strjoin(temp, new_line_cutter(move));
 			
-			temp_ptr = temp_ptr_content(ptr);
-			free_func(ptr, 0, 0);	//new
+			temp_ptr = temp_ptr_content(ptr, temp_ptr);
+			free_func(ptr, move, 0);	//new
 			return (temp);
 			// free(temp_ptr);
 			// temp_ptr = temp_ptr_content(ptr);
@@ -256,7 +261,6 @@ char *func_for_reading(char *temp, int fd)
 	{
 		if (ft_strlen_mod(temp) != 0)
 		{
-
 			temp[ft_strlen_mod(temp)] = '\0';
 			ft_bzero(temp_ptr, ft_strlen_mod(temp_ptr));
 			free_func(temp_ptr, ptr, 0);
@@ -338,20 +342,20 @@ char *get_next_line(int fd)
 	return (temp);
 }
 
-// int main()
-// {
-//      int fd = open("test2.txt", O_RDONLY, 0);
-// 	 printf("fd: %d\n", fd);
-// 	int i = 1;
-// 	char *ptr;
+int main()
+{
+     int fd = open("test2.txt", O_RDONLY, 0);
+	 printf("fd: %d\n", fd);
+	int i = 1;
+	char *ptr;
 	
-// 	while (i < 8)
-// 	{
-// 		ptr = get_next_line(fd);
-// 		printf("Ptr %d: %s\n", i, ptr);
-// 		show_new_line(ptr, "MAIN");
-// 		free(ptr);
-// 		i++;
-// 	}
-// }
+	while (i < 8)
+	{
+		ptr = get_next_line(fd);
+		printf("Ptr %d: %s\n", i, ptr);
+		show_new_line(ptr, "MAIN");
+		free(ptr);
+		i++;
+	}
+}
 
