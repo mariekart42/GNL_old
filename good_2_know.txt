@@ -1,13 +1,27 @@
 -    BUFFER_SIZE will only be defined while compilation
-     -> remove in the end from header
+          -> remove in the end from header
 
 -    no submittig Makefile !! (i only use it cause i'm alpha chad)
 
 -    remove TESTER, .gitignore, this .txt file, .vscode and a.out files
 
--     dont reallocate ptr on read
+
+
+-    dont reallocate ptr on read
 
 -    do not initialize an empty string like thi   *ptr = "";  (undefined behaviour! + gets in the 'read-only' area)
-     -> do it like this   *ptr = '\0'
+          -> do it like this   *ptr = '\0';
 
-    -     no need to free a NULL pointer
+-    no need to free a NULL pointer
+
+-    free only accepts NULL pointer or with malloc allocated pointers
+          -> char    *test;
+
+             test = (char *)malloc(20);
+             test = "something";
+             free(test);
+          -> free will not work cause test here is a string literal
+
+-    you can free an allocated pointer in another function! (see test_leaks.c)
+
+-    you have to free after all malloc including functions
