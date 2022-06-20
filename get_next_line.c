@@ -6,7 +6,7 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 01:03:25 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/20 01:04:55 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/20 15:07:02 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char *new_line_cutter(char *ptr)
 
      while (ptr[i] != '\n')
      {
-          if (i == ft_strlen(ptr)) // means there is no '\n'
+          if (i == ft_strlen_mod(ptr)) // means there is no '\n'
                return(NULL);
           i++;
      }
@@ -176,7 +176,7 @@ char *func_for_reading(char *temp, int fd)
 	char *ptr;
      static char *temp_ptr;
 	char *move;
-	char *move2;
+	//char *move2;
 
 	if (temp_ptr)
 	{
@@ -251,10 +251,10 @@ char *func_for_reading(char *temp, int fd)
 	}
 	if (val == 0)
 	{
-		if (ft_strlen(temp) != 0)
+		if (ft_strlen_mod(temp) != 0)
 		{
-			temp[ft_strlen(temp)] = '\0';
-			ft_bzero(temp_ptr, ft_strlen(temp_ptr));
+			temp[ft_strlen_mod(temp)] = '\0';
+			ft_bzero(temp_ptr, ft_strlen_mod(temp_ptr));
 			free_func(temp_ptr, ptr, 0);
 			return (temp);
 		}
@@ -289,7 +289,7 @@ char *reallocate(char *string, int size, int copy_content)
 	char *new_ptr;
 	size_t i = 0;
 	
-	new_ptr = (char *) malloc(ft_strlen(string) + size);
+	new_ptr = (char *) malloc(ft_strlen_mod(string) + size);
 
 	if(!new_ptr || !string)
 	{
@@ -299,7 +299,7 @@ char *reallocate(char *string, int size, int copy_content)
 	}
 	if (copy_content == 1)
 	{
-		while (i < ft_strlen(string))
+		while (i < ft_strlen_mod(string))
 		{
 			new_ptr[i] = string[i];
 			i++;
@@ -333,19 +333,19 @@ char *get_next_line(int fd)
 	return (temp);
 }
 
-int main()
-{
-     int fd = open("test2.txt", O_RDONLY, 0);
-	 printf("fd: %d\n", fd);
-	int i = 1;
-	char *ptr;
+// int main()
+// {
+//      int fd = open("test2.txt", O_RDONLY, 0);
+// 	 printf("fd: %d\n", fd);
+// 	int i = 1;
+// 	char *ptr;
 	
-	while (i < 8)
-	{
-		ptr = get_next_line(fd);
-		printf("Ptr %d: %s\n", i, ptr);
-		show_new_line(ptr, "MAIN");
-		free(ptr);
-		i++;
-	}
-}
+// 	while (i < 8)
+// 	{
+// 		ptr = get_next_line(fd);
+// 		printf("Ptr %d: %s\n", i, ptr);
+// 		show_new_line(ptr, "MAIN");
+// 		free(ptr);
+// 		i++;
+// 	}
+// }
