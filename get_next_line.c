@@ -5,13 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
 /*   Created: 2022/06/19 01:03:25 by mmensing          #+#    #+#             */
 /*   Updated: 2022/06/20 15:07:02 by mmensing         ###   ########.fr       */
-=======
+
 /*   Created: 2022/06/10 14:33:26 by mmensing          #+#    #+#             */
 /*   Updated: 2022/06/16 15:00:16 by mmensing         ###   ########.fr       */
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,15 +155,9 @@ char *temp_ptr_content(char *ptr)
 	k = 0;
 	while (ptr[i++] != '\0')
 	{
-<<<<<<< HEAD
 		new_ptr[k] = ptr[i];	// new (alright like this?->shorter)
 		k++;
 		i++;
-=======
-		new_ptr[k++] = ptr[i-1];	// new (alright like this?->shorter)
-		//k++;
-		//i++;
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
 	}
 	//free(temp_ptr);	//?
 	//free(ptr);
@@ -264,15 +256,11 @@ char *func_for_reading(char *temp, int fd)
 	{
 		if (ft_strlen_mod(temp) != 0)
 		{
-<<<<<<< HEAD
+
 			temp[ft_strlen_mod(temp)] = '\0';
 			ft_bzero(temp_ptr, ft_strlen_mod(temp_ptr));
 			free_func(temp_ptr, ptr, 0);
-=======
-			temp[ft_strlen(temp)] = '\0';
-			ft_bzero(temp_ptr, ft_strlen(temp_ptr));
-			free_func(temp_ptr, ptr, 0);	// new
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
+
 			return (temp);
 		}
 		else
@@ -357,7 +345,6 @@ char *get_next_line(int fd)
 // 	int i = 1;
 // 	char *ptr;
 	
-<<<<<<< HEAD
 // 	while (i < 8)
 // 	{
 // 		ptr = get_next_line(fd);
@@ -367,14 +354,4 @@ char *get_next_line(int fd)
 // 		i++;
 // 	}
 // }
-=======
-	while(i < 8)
-	{
-		ptr = get_next_line(fd);
-		printf("Ptr %d: %s\n", i, ptr);
-		show_new_line(ptr, "MAIN");
-		free(ptr);
-		i++;
-	}
-}
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
+

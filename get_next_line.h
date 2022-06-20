@@ -18,7 +18,7 @@
 
 char *get_next_line(int fd);
 
-<<<<<<< HEAD
+
 void	*ft_memchr(const void *str, int c, size_t n);
 void	*ft_calloc (size_t nelem, size_t elsize);
 size_t	ft_strlen_mod(const char *str);
@@ -28,14 +28,7 @@ void	*ft_memset(void *s, int c, size_t len);
 char	*ft_strchr(const char *str, int c);
 void	*ft_memmove(void *str1, const void *str2, size_t n);
 char	*ft_strdup(char *src);
-=======
-void      *ft_calloc (size_t nelem, size_t elsize);
-size_t	ft_strlen(const char *str);
-void      ft_bzero(void *str, size_t n);
-char      *ft_strjoin(char const *s1, char const *s2);
-char      *ft_strchr(const char *str, int c);
 
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
 
 // open & close
 # include <fcntl.h> 

@@ -6,13 +6,8 @@
 /*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 16:25:34 by mmensing          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2022/06/20 15:06:50 by mmensing         ###   ########.fr       */
-=======
-/*   Updated: 2022/06/16 11:25:13 by mmensing         ###   ########.fr       */
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #include "get_next_line.h"
 
@@ -99,7 +94,6 @@ char	*ft_strchr(const char *str, int c)
 }
 
 
-<<<<<<< HEAD
 /**
  * @brief function duplicates a string and return a pointer pointing to the 
  * first byte of copied string 
@@ -128,35 +122,6 @@ char	*ft_strdup(char *src)
 	return (ptr);
 }
 
-=======
-// /**
-//  * @brief function duplicates a string and return a pointer pointing to the 
-//  * first byte of copied string 
-//  * memory reserved with malloc
-//  * 
-//  * @param src pointer to string that gets copied
-//  * @return char* 
-//  */
-// char	*ft_strdup(char *src)
-// {
-// 	int		size;
-// 	char	*ptr;
-// 	int		i;
-
-// 	i = 0;
-// 	size = ft_strlen(src) + 1;
-// 	ptr = (char *) malloc(size * sizeof(char));
-// 	if (!ptr)
-// 		return (NULL);
-// 	while (src[i] != '\0')
-// 	{
-// 		ptr[i] = src[i];
-// 		i++;
-// 	}
-// 	ptr[i] = '\0';
-// 	return (ptr);
-// }
->>>>>>> fc7e6e0f2c88fe8488261290c92093588466a536
 
 /**
  * @brief	function allocates 'nitems' bytes of memory, each in size of 'size' 
