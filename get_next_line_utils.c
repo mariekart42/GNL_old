@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmensing <mmensing@wolfsburg.42student.    +#+  +:+       +#+        */
+/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 16:25:34 by mmensing          #+#    #+#             */
-/*   Updated: 2022/06/09 15:27:05 by mmensing         ###   ########.fr       */
+/*   Updated: 2022/06/20 15:06:50 by mmensing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	ptr = (char *) malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1);
+	ptr = (char *) malloc(ft_strlen_mod((char *)s1) + ft_strlen_mod((char *)s2) + 1);
 	if (!ptr)
 		return (NULL);
 	k = 0;
@@ -56,11 +56,13 @@ char	*ft_strjoin(char const *s1, char const *s2)
  * @param str 
  * @return size_t lengh of str
  */
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen_mod(const char *str)
 {
 	int	i;
 
 	i = 0;
+	if(!str)
+		return (0);
 	while (str[i] != '\0')
 		i++;
 	return (i);
@@ -185,7 +187,7 @@ char	*ft_strdup(char *src)
 	int		i;
 
 	i = 0;
-	size = ft_strlen(src) + 1;
+	size = ft_strlen_mod(src) + 1;
 	ptr = (char *) malloc(size * sizeof(char));
 	if (!ptr)
 		return (NULL);
