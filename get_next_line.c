@@ -342,20 +342,20 @@ char *get_next_line(int fd)
 	return (temp);
 }
 
-int main()
-{
-     int fd = open("test2.txt", O_RDONLY, 0);
-	 printf("fd: %d\n", fd);
-	int i = 1;
-	char *ptr;
+// int main()
+// {
+//      int fd = open("test2.txt", O_RDONLY, 0);
+// 	 printf("fd: %d\n", fd);
+// 	int i = 1;
+// 	char *ptr;
 	
-	while (i < 8)
-	{
-		ptr = get_next_line(fd);
-		printf("Ptr %d: %s\n", i, ptr);
-		show_new_line(ptr, "MAIN");
-		free(ptr);
-		i++;
-	}
-}
+// 	while (i < 8)
+// 	{
+// 		ptr = get_next_line(fd);
+// 		printf("Ptr %d: %s\n", i, ptr);
+// 		show_new_line(ptr, "MAIN");
+// 		free(ptr);
+// 		i++;
+// 	}
+// }
 
