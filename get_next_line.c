@@ -64,23 +64,31 @@ void	show_new_line(char *string, char *content)
 	free(ptr);
 }
 
-void free_func(char *ptr1, char* ptr2, char *ptr3)
+/**
+ * @brief 	function that checks if pointer exists, if yes freeing it
+ * 			double pointers, cause we need to pass the address of a pointer
+ *			to free it in another function
+ * @param ptr1 
+ * @param ptr2 
+ * @param ptr3 
+ */
+void free_func(char **ptr1, char **ptr2, char **ptr3)
 {
-     if(ptr1)
-     {
-          free(ptr1);
-          ptr1 = NULL;
-     }
-     if(ptr2)
-     {
-          free(ptr2);
-          ptr2 = NULL;
-     }
-     if(ptr3)
-     {
-          free(ptr3);
-          ptr3 = NULL;
-     }
+	if (ptr1 && *ptr1)
+	{
+		free(*ptr1);
+		*ptr1 = NULL;
+	}
+	if (ptr2 && *ptr2)
+	{
+		free(*ptr2);
+		*ptr2 = NULL;
+	}
+	if (ptr3 && *ptr3)
+	{
+		free(*ptr3);
+		*ptr3 = NULL;
+	}
 }
 
 /**
@@ -183,30 +191,23 @@ char *func_for_reading(char *temp, int fd)
 	char *ptr;
      static char *temp_ptr;
 	char *move;
-	//char *move2;
 
 	if (temp_ptr)
 	{
 		//free_func(temp, 0, 0);
 		temp = ft_strjoin("\0", temp_ptr);
 	}
-     // if (!temp_ptr)
-     // {
-     //      temp_ptr = (char *) ft_calloc (BUFFER_SIZE+1, sizeof(char));
-     //      if (!temp_ptr)
-     //           return (NULL);
-     // }
 
 	ptr = (char *) ft_calloc(BUFFER_SIZE+1, sizeof(char));
      if (!ptr)
      {
-          free_func(temp_ptr, temp, 0);
+          free_func(&temp_ptr, &temp, 0);
           return (NULL);
      }
 	
 	if (ft_strchr(temp, '\n') != NULL)
 	{
-		free_func(temp_ptr, 0, 0);
+		free_func(&temp_ptr, 0, 0);
 		temp_ptr = temp_ptr_content(temp, 0);
 		
 		move = ft_strdup(temp);
@@ -227,34 +228,22 @@ char *func_for_reading(char *temp, int fd)
 			temp = ft_strjoin(temp, new_line_cutter(move));
 			
 			temp_ptr = temp_ptr_content(ptr, temp_ptr);
-			free_func(ptr, move, 0);	//new
+			free_func(&ptr, &move, 0);
 			return (temp);
-			// free(temp_ptr);
-			// temp_ptr = temp_ptr_content(ptr);
-			
-			// move = new_line_cutter(ptr);
-			// free(ptr);
-			
-			// move2 = ft_strdup(temp);
-			// free(temp);
-			// temp = ft_strjoin(move2, move);
-			// free(move);
-			// free(move2);
-
-			// //free_func(ptr, 0, 0);	//new
-			// return (temp);
 		}
 		move = ft_strjoin(temp, ptr);
-		free_func(temp, 0, 0);
+		free_func(&temp, 0, 0);
 		temp = ft_strdup(move);
-		free(move);
-		//temp = ft_strjoin(temp, ptr);
-		
+		free_func(&move, 0, 0);
+		// free(ptr);
+		// ptr = NULL;
+		//move = NULL;
 		val = read(fd, ptr, BUFFER_SIZE);
+		ptr[val] = '\0';
 	}
 	if (val < 0)
 	{
-		free_func(temp_ptr, ptr, 0);	//new
+		free_func(&temp_ptr,&ptr, 0);
 		return(NULL);
 	}
 	if (val == 0)
@@ -263,14 +252,14 @@ char *func_for_reading(char *temp, int fd)
 		{
 			temp[ft_strlen_mod(temp)] = '\0';
 			ft_bzero(temp_ptr, ft_strlen_mod(temp_ptr));
-			free_func(temp_ptr, ptr, 0);
+			free_func(&temp_ptr, &ptr, 0);
 
 			return (temp);
 		}
 		else
 		{
-			// ft_bzero(temp_ptr, ft_strlen(temp_ptr));
-			// free(temp_ptr);
+			// ft_bzero(temp_ptr, strlen(temp_ptr));
+			// free_func(&temp_ptr, 0, 0);
 			return (NULL);
 		}
 			
@@ -352,7 +341,7 @@ char *get_next_line(int fd)
 // 	while (i < 8)
 // 	{
 // 		ptr = get_next_line(fd);
-// 		printf("Ptr %d: %s\n", i, ptr);
+// 		//printf("Ptr %d: %s\n", i, ptr);
 // 		show_new_line(ptr, "MAIN");
 // 		free(ptr);
 // 		i++;
