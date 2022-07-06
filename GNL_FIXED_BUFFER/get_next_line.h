@@ -1,34 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmensing <mmensing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/23 22:14:45 by mmensing          #+#    #+#             */
+/*   Updated: 2022/07/01 02:16:04 by mmensing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-
-// defining BUFFERSITE, delete at the and (calling it in the command line)
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
-
-#include <unistd.h>
-# include <stddef.h>
+//#define BUFFER_SIZE 20
 
 # include <stdlib.h>
+# include <unistd.h>
 # include <stdio.h>
+# include <stddef.h>
 # include <string.h>
 # include <strings.h>
-
-
-char *get_next_line(int fd);
-
-
-void	*ft_memchr(const void *str, int c, size_t n);
-void	*ft_calloc (size_t nelem, size_t elsize);
-size_t	ft_strlen_mod(const char *str);
-void	ft_bzero(void *str, size_t n);
-char	*ft_strjoin(char const *s1, char const *s2);
-void	*ft_memset(void *s, int c, size_t len);
-char	*ft_strchr(const char *str, int c);
-void	*ft_memmove(void *str1, const void *str2, size_t n);
-char	*ft_strdup(char *src);
-
 
 // open & close
 # include <fcntl.h> 
@@ -38,16 +30,11 @@ char	*ft_strdup(char *src);
 # include <sys/types.h>
 # include <sys/uio.h>
 
-//colour shit
-# define RED   "\x1B[31m"
-# define GRN   "\x1B[32m"
-# define YEL   "\x1B[33m"
-# define BLU   "\x1B[34m"
-# define MAG   "\x1B[35m"
-# define CYN   "\x1B[36m"
-# define WHT   "\x1B[37m"
+char	*get_next_line(int fd);
+void	*ft_memset(void *str, int c, size_t n);
+size_t	ft_strlen(const char *str);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strchr(const char *str, int c);
+void	*ft_calloc(size_t count, size_t size);
 
-# define RESET "\x1B[0m"
-
-# endif
-
+#endif
